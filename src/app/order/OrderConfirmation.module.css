@@ -1,0 +1,163 @@
+/* OrderConfirmation.module.css */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.confirmationCard {
+  background-color: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.successIcon {
+  width: 80px;
+  height: 80px;
+  background-color: #08106c;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+}
+
+.successIcon span {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.orderDetails {
+  margin-bottom: 1.5rem;
+}
+
+.orderNumberLabel {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 0.3rem;
+}
+
+.orderNumber {
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.message {
+  font-size: 1.1rem;
+  color: #444;
+  max-width: 500px;
+  margin: 0 auto 2rem;
+  line-height: 1.5;
+}
+
+.infoBox {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  text-align: left;
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+}
+
+@media (min-width: 640px) {
+  .infoBox {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.infoSection h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #666;
+}
+
+.infoSection p {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.tracking {
+  margin-bottom: 2rem;
+  color: #666;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 500px) {
+  .actions {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+.continueButton {
+  background-color: #08106c;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.continueButton:hover {
+  background-color: #333;
+}
+
+.viewOrderButton {
+  background-color: transparent;
+  color: #08106c;
+  border: 1px solid #08106c;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s;
+}
+
+.viewOrderButton:hover {
+  background-color: #f5f5f5;
+}
+
+.customerSupport {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+}
+
+.customerSupport h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.customerSupport p {
+  color: #555;
+}
+
+.customerSupport a {
+  color: #000;
+  text-decoration: underline;
+  font-weight: 500;
+}
