@@ -90,7 +90,7 @@ export default function women() {
       brand: 'Blue Blazer', 
       name: 'Men suit', 
       price: '$150.00', 
-      image: '/images/blue1.png',
+      image: '/images/gre.png',
       rating: 5
     },
     { 
@@ -98,7 +98,7 @@ export default function women() {
       brand: 'Tuxedo', 
       name: 'Men suit', 
       price: '$150.00', 
-      image: '/images/pink.png',
+      image: '/images/gree.png',
       rating: 5
     },
     { 
@@ -114,7 +114,7 @@ export default function women() {
       brand: 'Office Suit', 
       name: 'Men suit', 
       price: '$150.00', 
-      image: '/images/white.png',
+      image: '/images/busy2.jpg',
       rating: 5
     },
     { 
@@ -138,7 +138,7 @@ export default function women() {
       brand: 'Slim Fit', 
       name: 'Men suit', 
       price: '$200.00', 
-      image: '/images/black.png',
+      image: '/images/blue1.png',
       rating: 5
     },
     { 
@@ -146,7 +146,7 @@ export default function women() {
       brand: 'Slim Fit', 
       name: 'Men suit', 
       price: '$200.00', 
-      image: '/images/black.png',
+      image: '/images/pink.png',
       rating: 4
     },
     { 
@@ -154,7 +154,7 @@ export default function women() {
       brand: 'Slim Fit', 
       name: 'Men suit', 
       price: '$200.00', 
-      image: '/images/black.png',
+      image: '/images/busy.jpg',
       rating: 5
     },
     { 
@@ -162,7 +162,7 @@ export default function women() {
       brand: 'Slim Fit', 
       name: 'Men suit', 
       price: '$200.00', 
-      image: '/images/black.png',
+      image: '/images/white.png',
       rating: 5
     }
     

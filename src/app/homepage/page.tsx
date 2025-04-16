@@ -94,7 +94,7 @@ export default function homepage( ) {
       brand: 'Italian Suit', 
       name: 'Men suit', 
       price: '$150.00', 
-      image: '/images/color.png',
+      image: '/images/guy.png',
       rating: 5 
     },
     { 
@@ -118,7 +118,7 @@ export default function homepage( ) {
       brand: 'Double Breasted Suit', 
       name: 'Men suit', 
       price: '$150.00', 
-      image: '/images/shine.png',
+      image: '/images/beau.png',
       rating: 5
     },
     { 
@@ -126,7 +126,7 @@ export default function homepage( ) {
       brand: 'Classic Suit', 
       name: 'Men suit', 
       price: '$180.00', 
-      image: '/images/bblack.png',
+      image: '/images/tall.png',
       rating: 4
     },
     { 
@@ -134,7 +134,7 @@ export default function homepage( ) {
       brand: 'Slim Fit', 
       name: 'Men suit', 
       price: '$200.00', 
-      image: '/images/black.png',
+      image: '/images/frown.png',
       rating: 5
     },
     { 
@@ -142,7 +142,7 @@ export default function homepage( ) {
       brand: 'Slim Fit', 
       name: 'Men suit', 
       price: '$200.00', 
-      image: '/images/black.png',
+      image: '/images/bblack.png',
       rating: 5
     },
     { 
@@ -150,7 +150,7 @@ export default function homepage( ) {
       brand: 'Slim Fit', 
       name: 'Men suit', 
       price: '$200.00', 
-      image: '/images/black.png',
+      image: '/images/man1.png',
       rating: 4
     },
     { 
@@ -158,7 +158,7 @@ export default function homepage( ) {
       brand: 'Slim Fit', 
       name: 'Men suit', 
       price: '$200.00', 
-      image: '/images/black.png',
+      image: '/images/mew.png',
       rating: 5
     },
     { 
@@ -166,7 +166,7 @@ export default function homepage( ) {
       brand: 'Slim Fit', 
       name: 'Men suit', 
       price: '$200.00', 
-      image: '/images/black.png',
+      image: '/images/ash.png',
       rating: 5
     }
   ];
