@@ -18,6 +18,8 @@ interface CartContextType {
   addToCart: (item: CartItem) => void;
   removeFromCart: (id: number, size: string) => void;
   clearCart: () => void;
+  showAddedToast: boolean;
+  updateCartCount: (count: number) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -95,6 +97,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       addToCart, 
       removeFromCart, 
       clearCart,
+     showAddedToast: false, // Placeholder for toast state
       updateCartCount: setCartCount // Expose this for header cart count update
     }}>
       {children}

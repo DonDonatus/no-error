@@ -14,7 +14,7 @@ interface SignInFormData {
   remember: boolean;
 }
 
-export const signin = (): JSX.Element => {
+export default function signin() {
   const { register, handleSubmit } = useForm<SignInFormData>();
 
   const onSubmit = (data: SignInFormData) => {
@@ -122,4 +122,3 @@ export const signin = (): JSX.Element => {
   );
 };
 
-export default signin;

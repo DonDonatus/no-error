@@ -46,11 +46,9 @@ const translations: Record<string, Record<string, string>> = {
   // Add translations for other languages...
 };
 
-interface HeaderProps {
-  announcements?: string[];
-}
 
-export default function Navbar({ announcements = [translations.en.announcements] }: HeaderProps) {
+
+export default function homepage( ) {
   const pathname = usePathname();
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');

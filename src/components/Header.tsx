@@ -1,12 +1,14 @@
-"use client";
+
 
 import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import styles from '@/app/homepage/Header.module.css';
+import styles from './header.module.css';
 import { FiSearch, FiBell, FiUser, FiShoppingCart, FiChevronDown, FiClock } from 'react-icons/fi';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useCart } from './CartContext'; // Import from the new file
+import { useCart } from './CartContext'; // Import from the new file;
+import { IconBaseProps, IconType } from 'react-icons';
+
 
 interface Country {
   code: string;
@@ -139,11 +141,17 @@ const translations: Record<string, Record<string, string>> = {
   }
 };
 
-interface HeaderProps {
-  announcements?: string[];
+interface IconWrapperProps extends IconBaseProps {
+  icon: IconType;
 }
 
-export default function Header({ announcements = [translations.en.announcements] }: HeaderProps) {
+const IconWrapper: React.FC<IconWrapperProps> = ({ icon, ...props }) => {
+  // Use the as keyword to force TypeScript to accept this
+  const Icon = icon as React.ComponentType<IconBaseProps>;
+  return <Icon {...props} />;
+};
+
+export default function Header() {
   const pathname = usePathname();
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -226,7 +234,7 @@ export default function Header({ announcements = [translations.en.announcements]
           <div className={styles.navLeft}>
             <div className={styles.notificationContainer} ref={notificationRef}>
               <button className={styles.iconButton} onClick={toggleNotifications}>
-                <FiBell className={styles.icon} />
+                <IconWrapper icon={FiBell} className={styles.icon} />
                 {unreadCount > 0 && (
                   <span className={styles.notificationBadge}>{unreadCount}</span>
                 )}
@@ -318,7 +326,7 @@ export default function Header({ announcements = [translations.en.announcements]
                 />
               ) : (
                 <button onClick={toggleSearch} className={styles.iconButton}>
-                  <FiSearch className={styles.icon} />
+                  <IconWrapper icon={FiSearch} className={styles.icon} />
                   <span className={styles.searchText}>{getTranslation('search')}</span>
                 </button>
               )}
@@ -341,7 +349,7 @@ export default function Header({ announcements = [translations.en.announcements]
                 className={styles.countryButton}
               >
                 <span className={styles.flag}>{selectedCountry.flag}</span>
-                <FiChevronDown className={`${styles.chevron} ${isCountryOpen ? styles.rotate : ''}`} />
+                <IconWrapper icon={FiChevronDown} className={`{styles.chevron} ${isCountryOpen ? styles.rotate : ''}`} />
               </button>
 
               {isCountryOpen && (

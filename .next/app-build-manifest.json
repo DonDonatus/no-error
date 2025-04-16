@@ -12,11 +12,11 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/help/page": [
+    "/women/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/help/page.css",
-      "static/chunks/app/help/page.js"
+      "static/css/app/women/page.css",
+      "static/chunks/app/women/page.js"
     ],
     "/accessories/page": [
       "static/chunks/webpack.js",
@@ -24,11 +24,17 @@
       "static/css/app/accessories/page.css",
       "static/chunks/app/accessories/page.js"
     ],
-    "/women/page": [
+    "/product/[id]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/women/page.css",
-      "static/chunks/app/women/page.js"
+      "static/css/app/product/[id]/page.css",
+      "static/chunks/app/product/[id]/page.js"
+    ],
+    "/cart/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/cart/page.css",
+      "static/chunks/app/cart/page.js"
     ],
     "/_not-found/page": [
       "static/chunks/webpack.js",

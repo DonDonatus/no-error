@@ -7,6 +7,10 @@ import { FiSearch, FiBell, FiUser, FiShoppingCart, FiChevronDown, FiClock, FiFil
 import Image from 'next/image';
 import Header from '@/components/Header'; // Assuming Header is in the same directory
 import HelpButton from '@/components/HelpButton'; // Assuming HelpButton is in the same directory
+import React from 'react';
+import { IconType } from 'react-icons';
+import { IconBaseProps } from 'react-icons';
+
 
 interface Country {
   code: string;
@@ -46,6 +50,15 @@ const translations: Record<string, Record<string, string>> = {
 };
 
 
+interface IconWrapperProps extends IconBaseProps {
+  icon: React.ComponentType<IconBaseProps>;
+}
+
+const IconWrapper: React.FC<IconWrapperProps> = ({ icon, ...props }) => {
+  // Force TypeScript to treat this as a valid JSX element
+  const IconComponent = icon;
+  return <IconComponent {...props} />;
+};
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -227,9 +240,9 @@ export default function Navbar() {
               className={styles.filterToggle}
               onClick={toggleFilter}
             >
-              <FiFilter className={styles.filterIcon} />
+              <IconWrapper icon={FiFilter} className={styles.filterIcon} />
               <span>{translations[currentLanguage].filter}</span>
-              <FiChevronDown className={`${styles.chevron} ${filterOpen ? styles.rotate : ''}`} />
+              <IconWrapper icon={FiChevronDown} className={`${styles.chevron} ${filterOpen ? styles.rotate : ''}`} />
             </button>
           </div>
           

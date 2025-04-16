@@ -14,7 +14,7 @@ interface signupFormData {
   remember: boolean;
 }
 
-export const signup= (): JSX.Element => {
+export default function signup () {
   const { register, handleSubmit } = useForm<signupFormData>();
 
   const onSubmit = (data: signupFormData) => {
@@ -139,4 +139,3 @@ export const signup= (): JSX.Element => {
   );
 };
 
-export default signup;
