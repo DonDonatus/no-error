@@ -94,7 +94,7 @@ export default function homepage( ) {
       brand: 'Italian Suit', 
       name: 'Men suit', 
       price: '$150.00', 
-      image: '/color.png',
+      image: '/images/color.png',
       rating: 5 
     },
     { 
@@ -102,7 +102,7 @@ export default function homepage( ) {
       brand: 'Tuxedo', 
       name: 'Men suit', 
       price: '$150.00', 
-      image: '/image1.png',
+      image: '/images/image1.png',
       rating: 5
     },
     { 
@@ -110,7 +110,7 @@ export default function homepage( ) {
       brand: 'Mandarin Suit', 
       name: 'Men suit', 
       price: '$150.00', 
-      image: '/mandarin.jpg',
+      image: '/images/mandarin.jpg',
       rating: 5
     },
     { 
@@ -118,7 +118,7 @@ export default function homepage( ) {
       brand: 'Double Breasted Suit', 
       name: 'Men suit', 
       price: '$150.00', 
-      image: '/shine.png',
+      image: '/images/shine.png',
       rating: 5
     },
     { 
@@ -126,7 +126,7 @@ export default function homepage( ) {
       brand: 'Classic Suit', 
       name: 'Men suit', 
       price: '$180.00', 
-      image: '/bblack.png',
+      image: '/images/bblack.png',
       rating: 4
     },
     { 
@@ -134,7 +134,7 @@ export default function homepage( ) {
       brand: 'Slim Fit', 
       name: 'Men suit', 
       price: '$200.00', 
-      image: '/black.png',
+      image: '/images/black.png',
       rating: 5
     },
     { 
@@ -142,7 +142,7 @@ export default function homepage( ) {
       brand: 'Slim Fit', 
       name: 'Men suit', 
       price: '$200.00', 
-      image: '/black.png',
+      image: '/images/black.png',
       rating: 5
     },
     { 
@@ -150,7 +150,7 @@ export default function homepage( ) {
       brand: 'Slim Fit', 
       name: 'Men suit', 
       price: '$200.00', 
-      image: '/black.png',
+      image: '/images/black.png',
       rating: 4
     },
     { 
@@ -158,7 +158,7 @@ export default function homepage( ) {
       brand: 'Slim Fit', 
       name: 'Men suit', 
       price: '$200.00', 
-      image: '/black.png',
+      image: '/images/black.png',
       rating: 5
     },
     { 
@@ -166,7 +166,7 @@ export default function homepage( ) {
       brand: 'Slim Fit', 
       name: 'Men suit', 
       price: '$200.00', 
-      image: '/black.png',
+      image: '/images/black.png',
       rating: 5
     }
   ];

@@ -90,7 +90,7 @@ export default function women() {
       brand: 'Blue Blazer', 
       name: 'Men suit', 
       price: '$150.00', 
-      image: '/blue1.png',
+      image: '/images/blue1.png',
       rating: 5
     },
     { 
@@ -98,7 +98,7 @@ export default function women() {
       brand: 'Tuxedo', 
       name: 'Men suit', 
       price: '$150.00', 
-      image: '/pink.png',
+      image: '/images/pink.png',
       rating: 5
     },
     { 
@@ -106,7 +106,7 @@ export default function women() {
       brand: 'Tuxedo', 
       name: 'Men suit', 
       price: '$150.00', 
-      image: '/tux1.png',
+      image: '/images/tux1.png',
       rating: 5
     },
     { 
@@ -114,7 +114,7 @@ export default function women() {
       brand: 'Office Suit', 
       name: 'Men suit', 
       price: '$150.00', 
-      image: '/white.png',
+      image: '/images/white.png',
       rating: 5
     },
     { 
@@ -122,7 +122,7 @@ export default function women() {
       brand: 'Classic Suit', 
       name: 'Women suit', 
       price: '$180.00', 
-      image: '/clean.avif',
+      image: '/images/clean.avif',
       rating: 4
     },
     { 
@@ -130,7 +130,7 @@ export default function women() {
       brand: 'Slim Fit', 
       name: 'Women suit', 
       price: '$200.00', 
-      image: '/purple1.jpg',
+      image: '/images/purple1.jpg',
       rating: 5
     },
     { 
@@ -138,7 +138,7 @@ export default function women() {
       brand: 'Slim Fit', 
       name: 'Men suit', 
       price: '$200.00', 
-      image: '/black.png',
+      image: '/images/black.png',
       rating: 5
     },
     { 
@@ -146,7 +146,7 @@ export default function women() {
       brand: 'Slim Fit', 
       name: 'Men suit', 
       price: '$200.00', 
-      image: '/black.png',
+      image: '/images/black.png',
       rating: 4
     },
     { 
@@ -154,7 +154,7 @@ export default function women() {
       brand: 'Slim Fit', 
       name: 'Men suit', 
       price: '$200.00', 
-      image: '/black.png',
+      image: '/images/black.png',
       rating: 5
     },
     { 
@@ -162,7 +162,7 @@ export default function women() {
       brand: 'Slim Fit', 
       name: 'Men suit', 
       price: '$200.00', 
-      image: '/black.png',
+      image: '/images/black.png',
       rating: 5
     }
     
