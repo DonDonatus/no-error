@@ -8,7 +8,7 @@ import { useOrderHistory } from '@/components/OrderHistoryContext';
 
 
 export default function OrderHistory() {
-  const [activeOrder, setActiveOrder] = useState(null);
+  const [activeOrder, setActiveOrder] = useState<number | null>(null);
   const [filterOpen, setFilterOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('all');
@@ -138,6 +138,8 @@ export default function OrderHistory() {
       }
     }
   };
+
+  
 
   return (
     <>
@@ -536,38 +538,38 @@ export default function OrderHistory() {
                                         <motion.div 
                                           className="bg-blue-600 h-2.5 rounded-full" 
                                           initial={{ width: 0 }}
-                                          animate={{ width: `${order.product.delivery.progress}%` }}
+                                          animate={{ width: `${order.product.delivery.progress || 0}%` }}
                                           transition={{ duration: 1, delay: 0.2 }}
                                         ></motion.div>
                                       </div>
                                       <div className="flex justify-between text-xs text-gray-500 mt-2">
                                         <div className="flex flex-col items-center">
-                                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={order.product.delivery.progress >= 1 ? "#2563EB" : "#9CA3AF"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mb-1">
+                                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={(order.product.delivery.progress || 0) >= 1 ? "#2563EB" : "#9CA3AF"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mb-1">
                                             <circle cx="12" cy="12" r="10"></circle>
                                             <polyline points="12 6 12 12 16 14"></polyline>
                                           </svg>
-                                          <span className={order.product.delivery.progress >= 1 ? "text-blue-600 font-medium" : ""}>Ordered</span>
+                                          <span className={(order.product.delivery.progress || 0) >= 1 ? "text-blue-600 font-medium" : ""}>Ordered</span>
                                         </div>
                                         <div className="flex flex-col items-center">
-                                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={order.product.delivery.progress >= 40 ? "#2563EB" : "#9CA3AF"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mb-1">
+                                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={(order.product.delivery.progress || 0) >= 40 ? "#2563EB" : "#9CA3AF"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mb-1">
                                             <rect x="2" y="4" width="20" height="16" rx="2"></rect>
                                             <path d="M7 15h0M12 15h0M17 15h0"></path>
                                           </svg>
-                                          <span className={order.product.delivery.progress >= 40 ? "text-blue-600 font-medium" : ""}>Processing</span>
+                                          <span className={(order.product.delivery.progress || 0) >= 40 ? "text-blue-600 font-medium" : ""}>Processing</span>
                                         </div>
                                         <div className="flex flex-col items-center">
-                                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={order.product.delivery.progress >= 70 ? "#2563EB" : "#9CA3AF"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mb-1">
+                                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={(order.product.delivery.progress || 0) >= 70 ? "#2563EB" : "#9CA3AF"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mb-1">
                                             <path d="M5 12h14"></path>
                                             <path d="M12 5l7 7-7 7"></path>
                                           </svg>
-                                          <span className={order.product.delivery.progress >= 70 ? "text-blue-600 font-medium" : ""}>Shipped</span>
+                                          <span className={(order.product.delivery.progress || 0) >= 70 ? "text-blue-600 font-medium" : ""}>Shipped</span>
                                         </div>
                                         <div className="flex flex-col items-center">
-                                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={order.product.delivery.progress >= 100 ? "#2563EB" : "#9CA3AF"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mb-1">
+                                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={(order.product.delivery.progress || 0) >= 100 ? "#2563EB" : "#9CA3AF"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mb-1">
                                           <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                                             <polyline points="22 4 12 14.01 9 11.01"></polyline>
                                           </svg>
-                                          <span className={order.product.delivery.progress >= 100 ? "text-blue-600 font-medium" : ""}>Delivered</span>
+                                          <span className={(order.product.delivery.progress || 0) >= 100 ? "text-blue-600 font-medium" : ""}>Delivered</span>
                                         </div>
                                       </div>
                                     </dd>

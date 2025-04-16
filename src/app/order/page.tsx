@@ -10,6 +10,16 @@ import HelpButton from '@/components/HelpButton';
 import { useCart } from '@/components/CartContext';
 import { useOrderHistory } from '@/components/OrderHistoryContext';
 
+// Define the CartItem interface
+interface CartItem {
+  name?: string;
+  size?: string;
+  description?: string;
+  image?: string;
+  materials?: string[];
+  care?: string[];
+}
+
 export default function OrderConfirmation() {
   const router = useRouter();
   const { cartItems, updateCart } = useCart();
@@ -39,7 +49,7 @@ export default function OrderConfirmation() {
         deliveryDate.getFullYear()}`;
       
       // Create an order object for each cart item
-      cartItems.forEach(item => {
+      cartItems.forEach((item: CartItem) => {
         const newOrder = {
           id: randomOrderNum,
           date: formattedDate,
@@ -74,7 +84,7 @@ export default function OrderConfirmation() {
     if (!orderCreated) {
       updateCart([]);
     }
-  }, [cartItems, orderCreated]);
+  }, [cartItems, orderCreated, addOrder, updateCart]);
   
   useEffect(() => {
     // Debug localStorage after orders have been created
