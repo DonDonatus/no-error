@@ -1,12 +1,52 @@
-// components/OrderHistoryContext.js
+// components/OrderHistoryContext.tsx
 'use client';
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-// Create the context
-const OrderHistoryContext = createContext();
+// Define types for the order structure
+interface DeliveryInProgress {
+  tracking: string;
+  estimatedDelivery: string;
+  progress: number;
+}
+
+interface DeliveryCompleted {
+  tracking: string;
+  actualDelivery: string;
+}
+
+type Delivery = DeliveryInProgress | DeliveryCompleted;
+
+interface Product {
+  name: string;
+  size: string;
+  description: string;
+  image: string;
+  materials: string[];
+  care: string[];
+  delivery: Delivery;
+}
+
+interface Order {
+  id: string;
+  date: string;
+  status: string;
+  product: Product;
+}
+
+// Define context type
+interface OrderHistoryContextType {
+  orders: Order[];
+  addOrder: (newOrder: Partial<Order>) => void;
+  updateOrder: (orderId: string, updatedOrder: Partial<Order>) => void;
+  clearOrders: () => void;
+  generateUniqueId: () => string;
+}
+
+// Create the context with null as initial value but with the correct type
+const OrderHistoryContext = createContext<OrderHistoryContextType | null>(null);
 
 // Sample initial orders
-const initialOrders = [
+const initialOrders: Order[] = [
   {
     id: 'ABCD1294',
     date: '19/05/2023',
@@ -45,14 +85,19 @@ const initialOrders = [
 ];
 
 // Generate a unique ID for new orders
-const generateUniqueId = () => {
+const generateUniqueId = (): string => {
   return `ORD-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
 };
 
+// Props type for the provider component
+interface OrderHistoryProviderProps {
+  children: ReactNode;
+}
+
 // Create the provider component
-export function OrderHistoryProvider({ children }) {
+export function OrderHistoryProvider({ children }: OrderHistoryProviderProps) {
   // Initialize state with orders from local storage or default orders
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   
   // Load orders from localStorage when component mounts
   useEffect(() => {
@@ -75,8 +120,8 @@ export function OrderHistoryProvider({ children }) {
   
   // Monitor localStorage changes from other tabs/windows
   useEffect(() => {
-    const handleStorageChange = (e) => {
-      if (e.key === 'orderHistory') {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'orderHistory' && e.newValue) {
         try {
           const storedOrders = JSON.parse(e.newValue);
           console.log("Storage changed externally:", storedOrders);
@@ -92,26 +137,33 @@ export function OrderHistoryProvider({ children }) {
   }, []);
 
   // Add a new order
-  const addOrder = (newOrder) => {
+  const addOrder = (newOrder: Partial<Order>) => {
     console.log("Adding order:", newOrder);
     
-    // Ensure the order has a unique ID
-    if (!newOrder.id) {
-      newOrder.id = generateUniqueId();
-    }
-    
-    // Ensure the order has a date
-    if (!newOrder.date) {
-      newOrder.date = new Date().toLocaleDateString('en-GB');
-    }
-    
-    // Ensure the order has a status
-    if (!newOrder.status) {
-      newOrder.status = 'In progress';
-    }
+    const orderToAdd: Order = {
+      // Set defaults
+      id: generateUniqueId(),
+      date: new Date().toLocaleDateString('en-GB'),
+      status: 'In progress',
+      product: {
+        name: '',
+        size: '',
+        description: '',
+        image: '',
+        materials: [],
+        care: [],
+        delivery: {
+          tracking: '',
+          estimatedDelivery: '',
+          progress: 0
+        }
+      },
+      // Override with provided values
+      ...newOrder
+    };
     
     setOrders(prevOrders => {
-      const updatedOrders = [...prevOrders, newOrder];
+      const updatedOrders = [...prevOrders, orderToAdd];
       console.log("Updated orders:", updatedOrders);
       
       // Save to localStorage
@@ -126,7 +178,7 @@ export function OrderHistoryProvider({ children }) {
   };
   
   // Update an existing order
-  const updateOrder = (orderId, updatedOrder) => {
+  const updateOrder = (orderId: string, updatedOrder: Partial<Order>) => {
     setOrders(prevOrders => {
       const updatedOrders = prevOrders.map(order => 
         order.id === orderId ? { ...order, ...updatedOrder } : order
@@ -163,7 +215,7 @@ export function OrderHistoryProvider({ children }) {
 }
 
 // Custom hook to use the order history context
-export function useOrderHistory() {
+export function useOrderHistory(): OrderHistoryContextType {
   const context = useContext(OrderHistoryContext);
   if (!context) {
     throw new Error('useOrderHistory must be used within an OrderHistoryProvider');

@@ -20,6 +20,8 @@ interface CartContextType {
   clearCart: () => void;
   showAddedToast: boolean;
   updateCartCount: (count: number) => void;
+  cartItems: CartItem[]; // Expose this for header cart count update
+
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -98,7 +100,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
       removeFromCart, 
       clearCart,
      showAddedToast: false, // Placeholder for toast state
-      updateCartCount: setCartCount // Expose this for header cart count update
+      updateCartCount: setCartCount, // Expose this for header cart count update
+      cartItems: cart // Expose this for header cart count update
+     
     }}>
       {children}
     </CartContext.Provider>

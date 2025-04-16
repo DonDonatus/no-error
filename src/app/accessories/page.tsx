@@ -8,8 +8,7 @@ import Image from 'next/image';
 import Header from '@/components/Header'; // Assuming Header is in the same directory
 import HelpButton from '@/components/HelpButton'; // Assuming HelpButton is in the same directory
 import React from 'react';
-import { IconType } from 'react-icons';
-import { IconBaseProps } from 'react-icons';
+import { IconBaseProps , IconType } from 'react-icons';
 
 
 interface Country {
@@ -50,17 +49,18 @@ const translations: Record<string, Record<string, string>> = {
 };
 
 
+
 interface IconWrapperProps extends IconBaseProps {
-  icon: React.ComponentType<IconBaseProps>;
+  icon: IconType;
 }
 
 const IconWrapper: React.FC<IconWrapperProps> = ({ icon, ...props }) => {
-  // Force TypeScript to treat this as a valid JSX element
-  const IconComponent = icon;
-  return <IconComponent {...props} />;
+  // Use the as keyword to force TypeScript to accept this
+  const Icon = icon as React.ComponentType<IconBaseProps>;
+  return <Icon {...props} />;
 };
 
-export default function Navbar() {
+export default function accessories() {
   const pathname = usePathname();
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');

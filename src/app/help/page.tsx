@@ -5,7 +5,17 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { FiSearch } from 'react-icons/fi';
 import Header from '@/components/Header'; // Assuming you have a Header component
+import { IconBaseProps,IconType } from 'react-icons';
 
+interface IconWrapperProps extends IconBaseProps {
+  icon: IconType;
+}
+
+const IconWrapper: React.FC<IconWrapperProps> = ({ icon, ...props }) => {
+  // Use the as keyword to force TypeScript to accept this
+  const Icon = icon as React.ComponentType<IconBaseProps>;
+  return <Icon {...props} />;
+};
 export default function HelpPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -87,7 +97,8 @@ export default function HelpPage() {
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full p-4 pl-12 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-white"
         />
-        <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-xl" />
+         <IconWrapper icon={FiSearch} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-xl" />
+        
       </div>
     </div>
   </div>

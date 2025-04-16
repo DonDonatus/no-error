@@ -1,4 +1,4 @@
-
+"use client";
 
 import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
@@ -372,16 +372,16 @@ export default function Header() {
             </div>
             
             <Link href="/account" className={styles.iconButton}>
-              <FiUser className={styles.icon} />
+            <IconWrapper icon={FiUser} className={styles.icon} />
             </Link>
 
             <button className={styles.iconButton} title="History">
-              <FiClock className={styles.icon} />
+            <IconWrapper icon={FiClock} className={styles.icon} />
             </button>
 
             {/* Modified cart button to link directly to cart page */}
             <Link href="/cart" className={styles.iconButton}>
-              <FiShoppingCart className={styles.icon} />
+            <IconWrapper icon={FiShoppingCart} className={styles.icon} />
               <span className={styles.cartBadge}>{cartCount}</span>
             </Link>
           </div>

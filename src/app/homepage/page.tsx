@@ -8,6 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link'; // Added import for Link component
 import Header from '@/components/Header'; 
 import HelpButton from '@/components/HelpButton';
+import { IconBaseProps, IconType } from 'react-icons';
 
 interface Country {
   code: string;
@@ -44,6 +45,17 @@ const translations: Record<string, Record<string, string>> = {
     priceRange: "Price Range"
   },
   // Add translations for other languages...
+};
+
+
+interface IconWrapperProps extends IconBaseProps {
+  icon: IconType;
+}
+
+const IconWrapper: React.FC<IconWrapperProps> = ({ icon, ...props }) => {
+  // Use the as keyword to force TypeScript to accept this
+  const Icon = icon as React.ComponentType<IconBaseProps>;
+  return <Icon {...props} />;
 };
 
 
@@ -227,9 +239,9 @@ export default function homepage( ) {
               className={styles.filterToggle}
               onClick={toggleFilter}
             >
-              <FiFilter className={styles.filterIcon} />
+              <IconWrapper icon={FiFilter} className={styles.filterIcon} />
               <span>{translations[currentLanguage].filter}</span>
-              <FiChevronDown className={`${styles.chevron} ${filterOpen ? styles.rotate : ''}`} />
+              <IconWrapper icon={FiChevronDown} className={`${styles.chevron} ${filterOpen ? styles.rotate : ''}`} />
             </button>
           </div>
           

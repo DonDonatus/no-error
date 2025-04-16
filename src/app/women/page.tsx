@@ -7,6 +7,7 @@ import { FiSearch, FiBell, FiUser, FiShoppingCart, FiChevronDown, FiClock, FiFil
 import Image from 'next/image';
 import Header from '@/components/Header';
 import HelpButton from "@/components/HelpButton";
+import { IconBaseProps, IconType } from 'react-icons';
 
 interface Country {
   code: string;
@@ -45,11 +46,17 @@ const translations: Record<string, Record<string, string>> = {
   // Add translations for other languages...
 };
 
-interface HeaderProps {
-  announcements?: string[];
+interface IconWrapperProps extends IconBaseProps {
+  icon: IconType;
 }
 
-export default function Navbar({ announcements = [translations.en.announcements] }: HeaderProps) {
+const IconWrapper: React.FC<IconWrapperProps> = ({ icon, ...props }) => {
+  // Use the as keyword to force TypeScript to accept this
+  const Icon = icon as React.ComponentType<IconBaseProps>;
+  return <Icon {...props} />;
+};
+
+export default function women() {
   const pathname = usePathname();
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -229,9 +236,9 @@ export default function Navbar({ announcements = [translations.en.announcements]
               className={styles.filterToggle}
               onClick={toggleFilter}
             >
-              <FiFilter className={styles.filterIcon} />
+               <IconWrapper icon={FiFilter} className={styles.filterIcon} />
               <span>{translations[currentLanguage].filter}</span>
-              <FiChevronDown className={`${styles.chevron} ${filterOpen ? styles.rotate : ''}`} />
+              <IconWrapper icon={FiChevronDown} className={`${styles.chevron} ${filterOpen ? styles.rotate : ''}`} />
             </button>
           </div>
           

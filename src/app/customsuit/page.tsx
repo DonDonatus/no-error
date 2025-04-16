@@ -489,7 +489,7 @@ export default function SuitConfigurator() {
                         <button
                           key={color}
                           onClick={() => setSelectedColor(color)}
-                          className={`w-10 h-10 rounded-full ${colorMap[color]} ${
+                          className={`w-10 h-10 rounded-full ${`colorMap[color]`} ${
                             selectedColor === color 
                             ? 'ring-2 ring-blue-500 ring-offset-2' 
                             : 'hover:ring-1 hover:ring-gray-300 hover:ring-offset-1'
@@ -630,7 +630,7 @@ export default function SuitConfigurator() {
               </div>
               
               {/* Placeholder for suit image */}
-              <div className={`relative aspect-[3/4] ${colorMap[selectedColor]} rounded-lg transition-colors duration-300`}>
+              <div className={`relative aspect-[3/4] ${`colorMap[selectedColor]`} rounded-lg transition-colors duration-300`}>
                 <div className="absolute inset-0 flex items-center justify-center">
                   <Image 
                     src={`/images/suits/${selectedMaterial.id}/${selectedButton}-${selectedLapel}.png`}
