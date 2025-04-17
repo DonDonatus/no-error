@@ -1,22 +1,28 @@
 // src/app/customsuit/page.tsx
 "use client";
 
+
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import InteractiveSuitPreview from '@/components/InteractiveSuitPreview';
+
+
+
+
+
 
 // Custom hook for animations
 const useAnimation = () => {
   const [animationComplete, setAnimationComplete] = useState(false);
-  
+ 
   useEffect(() => {
     setTimeout(() => setAnimationComplete(true), 1800);
   }, []);
-  
+ 
   return animationComplete;
 };
+
 
 // Premium Material Swatches
 const materials = [
@@ -40,6 +46,7 @@ const materials = [
   },
 ];
 
+
 // Color mapping
 const colorMap = {
   slate: "bg-gray-400",
@@ -57,12 +64,14 @@ const colorMap = {
   khaki: "bg-yellow-700",
 };
 
+
 // Button styles
 const buttonTypes = [
   { id: 'single', name: 'Single Button' },
   { id: 'double', name: 'Double Button' },
   { id: 'threeButton', name: 'Three Button' },
 ];
+
 
 // Lapel styles
 const lapelTypes = [
@@ -71,12 +80,14 @@ const lapelTypes = [
   { id: 'shawl', name: 'Shawl Lapel' },
 ];
 
+
 // Pocket styles
 const pocketTypes = [
   { id: 'flap', name: 'Flap Pockets' },
   { id: 'patch', name: 'Patch Pockets' },
   { id: 'jetted', name: 'Jetted Pockets' },
 ];
+
 
 // Measurement presets
 const fitTypes = [
@@ -85,14 +96,8 @@ const fitTypes = [
   { id: 'relaxed', name: 'Relaxed Fit' },
 ];
 
-// Enhanced Icons with consistent style
-const PocketIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-    <rect x="4" y="6" width="16" height="12" rx="2" strokeLinecap="round" />
-    <path d="M8 10h8M8 14h8" strokeLinecap="round" strokeDasharray="0.5 2" />
-  </svg>
-);
 
+// Icons
 const FabricIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
     <path d="M4 4h16v16H4z" strokeLinecap="round" />
@@ -100,6 +105,7 @@ const FabricIcon = () => (
     <path d="M4 4l16 16M20 4L4 20" strokeLinecap="round" strokeDasharray="0.5 2" />
   </svg>
 );
+
 
 const ButtonIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -109,11 +115,21 @@ const ButtonIcon = () => (
   </svg>
 );
 
+
 const LapelIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
     <path d="M12 3v18M7 3l5 8v10M17 3l-5 8" strokeLinecap="round" />
   </svg>
 );
+
+
+const PocketIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <rect x="4" y="6" width="16" height="12" rx="2" strokeLinecap="round" />
+    <path d="M8 10h8M8 14h8" strokeLinecap="round" strokeDasharray="0.5 2" />
+  </svg>
+);
+
 
 const LiningIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -123,13 +139,6 @@ const LiningIcon = () => (
   </svg>
 );
 
-const MeasurementsIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-    <path d="M6 2v20M18 2v20" strokeLinecap="round" />
-    <path d="M6 12h12" strokeLinecap="round" />
-    <path d="M11 4h2M11 8h2M11 16h2M11 20h2" strokeLinecap="round" />
-  </svg>
-);
 
 export default function SuitConfigurator() {
   const router = useRouter();
@@ -147,20 +156,29 @@ export default function SuitConfigurator() {
   const [isDesktop, setIsDesktop] = useState(true);
   const [showTooltip, setShowTooltip] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(1);
+  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
+    fabric: true,
+    button: false,
+    lapel: false,
+    pockets: false,
+    lining: false
+  });
   const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  
+
+
   // Handle responsive layout
   useEffect(() => {
     const checkScreenSize = () => {
       setIsDesktop(window.innerWidth >= 768);
     };
-    
+   
     checkScreenSize();
     window.addEventListener('resize', checkScreenSize);
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
-  // Handle 3D rotation with requestAnimationFrame
+
+  // Handle 3D rotation
   useEffect(() => {
     if (rotating) {
       let frame: number;
@@ -173,65 +191,69 @@ export default function SuitConfigurator() {
     }
   }, [rotating]);
 
+
   const customizationOptions = [
     { id: 'fabric', name: 'Fabric', icon: <FabricIcon />, subtitle: 'Premium material selection' },
-
     { id: 'button', name: 'Buttons', icon: <ButtonIcon />, subtitle: 'Style and placement' },
     { id: 'lapel', name: 'Lapel', icon: <LapelIcon />, subtitle: 'Collar design and width' },
     { id: 'pockets', name: 'Pockets', icon: <PocketIcon />, subtitle: 'Placement and type' },
     { id: 'lining', name: 'Lining', icon: <LiningIcon />, subtitle: 'Interior finish' },
   ];
 
+
   const handleAddToCart = () => {
-    // Show tooltip
     setShowTooltip(true);
-    
-    // Clear any existing timeout
     if (tooltipTimeoutRef.current) {
       clearTimeout(tooltipTimeoutRef.current);
     }
-    
-    // Set new timeout to hide tooltip
     tooltipTimeoutRef.current = setTimeout(() => {
       setShowTooltip(false);
     }, 3000);
   };
 
+
   const handleExit = () => {
-    router.push('/');
+    router.back();
   };
+
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+
   const handleTabChange = (id: string) => {
     setCurrentTab(id);
     setIsMenuOpen(false);
+    setExpandedSections(prev => ({ ...prev, [id]: true }));
   };
+
+
+  const toggleSection = (id: string) => {
+    setExpandedSections(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
 
   const handleMaterialChange = (material: typeof materials[0]) => {
     setSelectedMaterial(material);
     setSelectedColor(material.colors[0]);
   };
 
-  // Calculate price based on selected options
+
   const calculatePrice = () => {
     let basePrice = selectedMaterial.id === 'cashmere' ? 899 : selectedMaterial.id === 'wool' ? 699 : 599;
-    
-    // Add for premium options
     if (selectedLapel === 'peak') basePrice += 50;
     if (selectedButton === 'double') basePrice += 30;
-    
     return basePrice;
   };
+
 
   return (
     <div className="min-h-screen flex flex-col bg-neutral-50 text-gray-900">
       {/* Intro animation overlay */}
       <AnimatePresence>
         {!animationComplete && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 1 }}
             animate={{ opacity: 0 }}
             exit={{ opacity: 0 }}
@@ -244,7 +266,7 @@ export default function SuitConfigurator() {
               transition={{ duration: 0.5 }}
               className="text-center text-white"
             >
-              <motion.h1 
+              <motion.h1
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.2 }}
@@ -252,7 +274,7 @@ export default function SuitConfigurator() {
               >
                 UOMO MIGLIORE
               </motion.h1>
-              <motion.div 
+              <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: '100%' }}
                 transition={{ delay: 0.5, duration: 0.6 }}
@@ -271,11 +293,12 @@ export default function SuitConfigurator() {
         )}
       </AnimatePresence>
 
+
       {/* Header */}
       <header className="bg-white border-b border-gray-100 sticky top-0 z-30 shadow-sm">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <button 
-            onClick={handleExit} 
+          <button
+            onClick={handleExit}
             className="text-gray-800 hover:text-blue-700 transition-colors duration-200 flex items-center gap-2"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -283,18 +306,17 @@ export default function SuitConfigurator() {
             </svg>
             <span className="text-lg font-medium">Exit</span>
           </button>
-          
+         
           <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:block">
-            <div className="flex items-center gap-1">
-              
+            <div className="flex items-center gap-0">
               <h1 className="">
-                <img src="/icons/logo.svg" className='size-15'/>
-                </h1>
+                <img src="/icons/logo.svg" className='size-12'/>
+              </h1>
             </div>
           </div>
-          
+         
           <div className="flex items-center gap-3">
-            <button 
+            <button
               onClick={toggleMenu}
               className="md:hidden p-2 hover:bg-gray-100 rounded-full transition-colors"
             >
@@ -302,7 +324,7 @@ export default function SuitConfigurator() {
                 <path d="M4 6h16M4 12h16M4 18h16" strokeLinecap="round"/>
               </svg>
             </button>
-            
+           
             <div className="w-10 h-10 bg-blue-900 rounded-full overflow-hidden shadow-md ring-2 ring-blue-100 flex items-center justify-center text-white">
               <span className="text-sm font-medium">AC</span>
             </div>
@@ -310,7 +332,8 @@ export default function SuitConfigurator() {
         </div>
       </header>
 
-      {/* Mobile menu slide-in */}
+
+      {/* Mobile menu */}
       <AnimatePresence>
         {isMenuOpen && !isDesktop && (
           <motion.div
@@ -323,7 +346,7 @@ export default function SuitConfigurator() {
             <div className="p-5">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-medium text-gray-900">Menu</h2>
-                <button 
+                <button
                   onClick={toggleMenu}
                   className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                 >
@@ -332,15 +355,15 @@ export default function SuitConfigurator() {
                   </svg>
                 </button>
               </div>
-              
+             
               <div className="space-y-2">
                 {customizationOptions.map((option) => (
                   <button
                     key={option.id}
                     onClick={() => handleTabChange(option.id)}
                     className={`w-full text-left p-3 rounded-lg transition-colors ${
-                      currentTab === option.id 
-                      ? 'bg-blue-50 text-blue-900' 
+                      currentTab === option.id
+                      ? 'bg-blue-50 text-blue-900'
                       : 'hover:bg-gray-50 text-gray-700'
                     }`}
                   >
@@ -360,59 +383,197 @@ export default function SuitConfigurator() {
         )}
       </AnimatePresence>
 
+
       {/* Main content */}
       <div className={`flex flex-1 ${isDesktop ? 'flex-row' : 'flex-col'}`}>
         {/* Left sidebar - desktop version */}
         {isDesktop && (
           <div className="w-80 bg-white p-5 shadow-sm z-20 overflow-auto h-[calc(100vh-64px)] sticky top-16">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               className="bg-gradient-to-r from-blue-800 to-blue-900 text-white py-4 px-6 mb-6 rounded-xl shadow-md"
             >
               <h2 className="text-xl font-semibold text-center">Customize Your Suit</h2>
             </motion.div>
-            
+           
             <nav className="mb-6">
-              <ul className="flex flex-wrap gap-2">
+              <ul className="space-y-2">
                 {customizationOptions.map((option, index) => (
                   <motion.li
                     key={option.id}
                     initial={{ opacity: 0, x: -20 }}
-                    animate={{ 
-                      opacity: 1, 
+                    animate={{
+                      opacity: 1,
                       x: 0,
-                      transition: { delay: index * 0.1 + 0.2 } 
+                      transition: { delay: index * 0.1 + 0.2 }
                     }}
                     className="w-full"
                   >
-                    <button
-                      onClick={() => setCurrentTab(option.id)}
-                      className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${
-                        currentTab === option.id 
-                        ? 'bg-blue-50 border-l-4 border-blue-700 shadow-sm' 
-                        : 'hover:bg-gray-50'
-                      }`}
-                    >
-                      <div className={`w-6 h-6 ${
-                        currentTab === option.id ? 'text-blue-700' : 'text-gray-500'
-                      }`}>
-                        {option.icon}
-                      </div>
-                      <div className="text-left">
-                        <span className={`block ${
-                          currentTab === option.id ? 'font-medium text-blue-900' : 'text-gray-800'
-                        }`}>
-                          {option.name}
-                        </span>
-                        <span className="text-xs text-gray-500">{option.subtitle}</span>
-                      </div>
-                    </button>
+                    <div className="border-b border-gray-100 pb-2">
+                      <button
+                        onClick={() => toggleSection(option.id)}
+                        className={`w-full flex items-center justify-between p-3 rounded-lg transition-all duration-200 ${
+                          currentTab === option.id
+                          ? 'bg-blue-50'
+                          : 'hover:bg-gray-50'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`w-6 h-6 ${
+                            currentTab === option.id ? 'text-blue-700' : 'text-gray-500'
+                          }`}>
+                            {option.icon}
+                          </div>
+                          <div className="text-left">
+                            <span className={`block ${
+                              currentTab === option.id ? 'font-medium text-blue-900' : 'text-gray-800'
+                            }`}>
+                              {option.name}
+                            </span>
+                            <span className="text-xs text-gray-500">{option.subtitle}</span>
+                          </div>
+                        </div>
+                        <svg
+                          className={`w-5 h-5 transition-transform ${expandedSections[option.id] ? 'rotate-180' : ''}`}
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                        </svg>
+                      </button>
+
+
+                      <AnimatePresence>
+                        {expandedSections[option.id] && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="overflow-hidden"
+                          >
+                            <div className="pl-9 pr-3 py-2">
+                              {option.id === 'fabric' && (
+                                <div className="space-y-4">
+                                  <div className="grid grid-cols-1 gap-3">
+                                    {materials.map((material) => (
+                                      <button
+                                        key={material.id}
+                                        onClick={() => handleMaterialChange(material)}
+                                        className={`p-3 rounded-lg border ${
+                                          selectedMaterial.id === material.id
+                                          ? 'border-blue-600 ring-1 ring-blue-200'
+                                          : 'border-gray-200 hover:border-gray-300'
+                                        } transition-all text-left`}
+                                      >
+                                        <div className={`h-10 w-full rounded-md mb-2 ${material.texture}`}></div>
+                                        <h4 className="font-medium text-gray-900">{material.name}</h4>
+                                        <p className="text-xs text-gray-500">
+                                          {material.id === 'wool' ? 'Versatile, durable' :
+                                           material.id === 'cashmere' ? 'Luxurious, soft' :
+                                           'Breathable, light'}
+                                        </p>
+                                      </button>
+                                    ))}
+                                  </div>
+                                 
+                                  <div>
+                                    <h4 className="font-medium text-gray-900 mb-2">Color</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                      {selectedMaterial.colors.map((color) => (
+                                        <button
+                                          key={color}
+                                          onClick={() => setSelectedColor(color)}
+                                          className={`w-8 h-8 rounded-full ${colorMap[color as keyof typeof colorMap]} ${
+                                            selectedColor === color
+                                            ? 'ring-2 ring-blue-500 ring-offset-2'
+                                            : 'hover:ring-1 hover:ring-gray-300 hover:ring-offset-1'
+                                          } transition-all`}
+                                          aria-label={`Select ${color}`}
+                                        />
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                             
+                              {option.id === 'button' && (
+                                <div className="space-y-3">
+                                  {buttonTypes.map((type) => (
+                                    <button
+                                      key={type.id}
+                                      onClick={() => setSelectedButton(type.id)}
+                                      className={`w-full p-3 rounded-lg border ${
+                                        selectedButton === type.id
+                                        ? 'border-blue-600 bg-blue-50'
+                                        : 'border-gray-200 hover:border-gray-300'
+                                      } transition-all text-left`}
+                                    >
+                                      {type.name}
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+                             
+                              {option.id === 'lapel' && (
+                                <div className="space-y-3">
+                                  {lapelTypes.map((type) => (
+                                    <button
+                                      key={type.id}
+                                      onClick={() => setSelectedLapel(type.id)}
+                                      className={`w-full p-3 rounded-lg border ${
+                                        selectedLapel === type.id
+                                        ? 'border-blue-600 bg-blue-50'
+                                        : 'border-gray-200 hover:border-gray-300'
+                                      } transition-all text-left`}
+                                    >
+                                      {type.name}
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+                             
+                              {option.id === 'pockets' && (
+                                <div className="space-y-3">
+                                  {pocketTypes.map((type) => (
+                                    <button
+                                      key={type.id}
+                                      onClick={() => setSelectedPocket(type.id)}
+                                      className={`w-full p-3 rounded-lg border ${
+                                        selectedPocket === type.id
+                                        ? 'border-blue-600 bg-blue-50'
+                                        : 'border-gray-200 hover:border-gray-300'
+                                      } transition-all text-left`}
+                                    >
+                                      {type.name}
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+                             
+                              {option.id === 'lining' && (
+                                <div className="space-y-3">
+                                  {['Classic', 'Silk', 'Patterned', 'Contrast'].map((type) => (
+                                    <button
+                                      key={type}
+                                      className="w-full p-3 rounded-lg border border-gray-200 hover:border-gray-300 transition-all text-left"
+                                    >
+                                      {type}
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
                   </motion.li>
                 ))}
               </ul>
             </nav>
-            
+           
             {/* Order summary */}
             <motion.div
               initial={{ opacity: 0 }}
@@ -443,162 +604,178 @@ export default function SuitConfigurator() {
             </motion.div>
           </div>
         )}
-        
-        {/* Right content - suit preview and options */}
+       
+        {/* Right content - suit preview */}
         <div className="flex-1 flex flex-col">
-          {/* Options area */}
-          <div className="bg-white border-b border-gray-100 p-5">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentTab}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-              >
-                {currentTab === 'fabric' && (
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">Select Material</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-                      {materials.map((material) => (
-                        <button
-                          key={material.id}
-                          onClick={() => handleMaterialChange(material)}
-                          className={`p-3 rounded-lg border ${
-                            selectedMaterial.id === material.id 
-                            ? 'border-blue-600 ring-1 ring-blue-200' 
-                            : 'border-gray-200 hover:border-gray-300'
-                          } transition-all`}
-                        >
-                          <div className={`h-10 w-full rounded-md mb-2 ${material.texture}`}></div>
-                          <div className="text-left">
-                            <h4 className="font-medium text-gray-900">{material.name}</h4>
-                            <p className="text-xs text-gray-500">
-                              {material.id === 'wool' ? 'Versatile, durable' : 
-                               material.id === 'cashmere' ? 'Luxurious, soft' : 
-                               'Breathable, light'}
-                            </p>
+          {/* Options area - mobile */}
+          {!isDesktop && (
+            <div className="bg-white border-b border-gray-100 p-5">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentTab}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <button
+                    onClick={() => toggleSection(currentTab)}
+                    className="w-full flex items-center justify-between p-3 bg-gray-50 rounded-lg mb-4"
+                  >
+                    <h3 className="text-lg font-medium text-gray-900">
+                      {customizationOptions.find(o => o.id === currentTab)?.name}
+                    </h3>
+                    <svg
+                      className={`w-5 h-5 transition-transform ${expandedSections[currentTab] ? 'rotate-180' : ''}`}
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                  </button>
+
+
+                  {expandedSections[currentTab] && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden"
+                    >
+                      {currentTab === 'fabric' && (
+                        <div className="space-y-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            {materials.map((material) => (
+                              <button
+                                key={material.id}
+                                onClick={() => handleMaterialChange(material)}
+                                className={`p-3 rounded-lg border ${
+                                  selectedMaterial.id === material.id
+                                  ? 'border-blue-600 ring-1 ring-blue-200'
+                                  : 'border-gray-200 hover:border-gray-300'
+                                } transition-all`}
+                              >
+                                <div className={`h-10 w-full rounded-md mb-2 ${material.texture}`}></div>
+                                <div className="text-left">
+                                  <h4 className="font-medium text-gray-900">{material.name}</h4>
+                                  <p className="text-xs text-gray-500">
+                                    {material.id === 'wool' ? 'Versatile, durable' :
+                                     material.id === 'cashmere' ? 'Luxurious, soft' :
+                                     'Breathable, light'}
+                                  </p>
+                                </div>
+                              </button>
+                            ))}
                           </div>
-                        </button>
-                      ))}
-                    </div>
-                    
-                    <h3 className="text-lg font-medium text-gray-900 mb-3">Select Color</h3>
-                    <div className="flex flex-wrap gap-3">
-                      {selectedMaterial.colors.map((color) => (
-                        <button
-                          key={color}
-                          onClick={() => setSelectedColor(color)}
-                          className={`w-10 h-10 rounded-full ${`colorMap[color]`} ${
-                            selectedColor === color 
-                            ? 'ring-2 ring-blue-500 ring-offset-2' 
-                            : 'hover:ring-1 hover:ring-gray-300 hover:ring-offset-1'
-                          } transition-all`}
-                          aria-label={`Select ${color}`}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )}
-                
-            
-                
-                {currentTab === 'button' && (
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">Button Style</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      {buttonTypes.map((type) => (
-                        <button
-                          key={type.id}
-                          onClick={() => setSelectedButton(type.id)}
-                          className={`p-3 rounded-lg border ${
-                            selectedButton === type.id 
-                            ? 'border-blue-600 bg-blue-50' 
-                            : 'border-gray-200 hover:border-gray-300'
-                          } transition-all`}
-                        >
-                          <h4 className="font-medium text-gray-900">{type.name}</h4>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                
-                {currentTab === 'lapel' && (
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">Lapel Style</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      {lapelTypes.map((type) => (
-                        <button
-                          key={type.id}
-                          onClick={() => setSelectedLapel(type.id)}
-                          className={`p-3 rounded-lg border ${
-                            selectedLapel === type.id 
-                            ? 'border-blue-600 bg-blue-50' 
-                            : 'border-gray-200 hover:border-gray-300'
-                          } transition-all`}
-                        >
-                          <h4 className="font-medium text-gray-900">{type.name}</h4>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                
-                {currentTab === 'pockets' && (
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">Pocket Style</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      {pocketTypes.map((type) => (
-                        <button
-                          key={type.id}
-                          onClick={() => setSelectedPocket(type.id)}
-                          className={`p-3 rounded-lg border ${
-                            selectedPocket === type.id 
-                            ? 'border-blue-600 bg-blue-50' 
-                            : 'border-gray-200 hover:border-gray-300'
-                          } transition-all`}
-                        >
-                          <h4 className="font-medium text-gray-900">{type.name}</h4>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                
-                {currentTab === 'lining' && (
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">Interior Lining</h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                      {['Classic', 'Silk', 'Patterned', 'Contrast'].map((type) => (
-                        <button
-                          key={type}
-                          className="p-3 rounded-lg border border-gray-200 hover:border-gray-300 transition-all"
-                        >
-                          <h4 className="font-medium text-gray-900">{type}</h4>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </motion.div>
-            </AnimatePresence>
-          </div>
-          
+                         
+                          <div>
+                            <h4 className="font-medium text-gray-900 mb-3">Select Color</h4>
+                            <div className="flex flex-wrap gap-3">
+                              {selectedMaterial.colors.map((color) => (
+                                <button
+                                  key={color}
+                                  onClick={() => setSelectedColor(color)}
+                                  className={`w-10 h-10 rounded-full ${colorMap[color as keyof typeof colorMap]} ${
+                                    selectedColor === color
+                                    ? 'ring-2 ring-blue-500 ring-offset-2'
+                                    : 'hover:ring-1 hover:ring-gray-300 hover:ring-offset-1'
+                                  } transition-all`}
+                                  aria-label={`Select ${color}`}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                     
+                      {currentTab === 'button' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          {buttonTypes.map((type) => (
+                            <button
+                              key={type.id}
+                              onClick={() => setSelectedButton(type.id)}
+                              className={`p-3 rounded-lg border ${
+                                selectedButton === type.id
+                                ? 'border-blue-600 bg-blue-50'
+                                : 'border-gray-200 hover:border-gray-300'
+                              } transition-all`}
+                            >
+                              <h4 className="font-medium text-gray-900">{type.name}</h4>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                     
+                      {currentTab === 'lapel' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          {lapelTypes.map((type) => (
+                            <button
+                              key={type.id}
+                              onClick={() => setSelectedLapel(type.id)}
+                              className={`p-3 rounded-lg border ${
+                                selectedLapel === type.id
+                                ? 'border-blue-600 bg-blue-50'
+                                : 'border-gray-200 hover:border-gray-300'
+                              } transition-all`}
+                            >
+                              <h4 className="font-medium text-gray-900">{type.name}</h4>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                     
+                      {currentTab === 'pockets' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          {pocketTypes.map((type) => (
+                            <button
+                              key={type.id}
+                              onClick={() => setSelectedPocket(type.id)}
+                              className={`p-3 rounded-lg border ${
+                                selectedPocket === type.id
+                                ? 'border-blue-600 bg-blue-50'
+                                : 'border-gray-200 hover:border-gray-300'
+                              } transition-all`}
+                            >
+                              <h4 className="font-medium text-gray-900">{type.name}</h4>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                     
+                      {currentTab === 'lining' && (
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                          {['Classic', 'Silk', 'Patterned', 'Contrast'].map((type) => (
+                            <button
+                              key={type}
+                              className="p-3 rounded-lg border border-gray-200 hover:border-gray-300 transition-all"
+                            >
+                              <h4 className="font-medium text-gray-900">{type}</h4>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </motion.div>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          )}
+         
           {/* Preview area */}
           <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100 p-6 relative">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
-              style={{ 
+              style={{
                 transformStyle: 'preserve-3d',
                 transform: `rotateY(${viewAngle}deg) scale(${zoomLevel})`,
               }}
               className="relative w-full max-w-md bg-white rounded-xl shadow-xl overflow-hidden p-8 transition-transform duration-300"
             >
               <div className="absolute top-4 right-4 flex space-x-2 z-10">
-                <button 
+                <button
                   onClick={() => setRotating(!rotating)}
                   className="p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors"
                   aria-label="Rotate view"
@@ -609,7 +786,7 @@ export default function SuitConfigurator() {
                     <path d="M16 16l-4-4" strokeLinecap="round" />
                   </svg>
                 </button>
-                <button 
+                <button
                   onClick={() => setZoomLevel(z => Math.min(z + 0.1, 1.5))}
                   className="p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors"
                   aria-label="Zoom in"
@@ -618,7 +795,7 @@ export default function SuitConfigurator() {
                     <path d="M12 6v12M6 12h12" strokeLinecap="round" />
                   </svg>
                 </button>
-                <button 
+                <button
                   onClick={() => setZoomLevel(z => Math.max(z - 0.1, 0.8))}
                   className="p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors"
                   aria-label="Zoom out"
@@ -628,11 +805,11 @@ export default function SuitConfigurator() {
                   </svg>
                 </button>
               </div>
-              
-              {/* Placeholder for suit image */}
-              <div className={`relative aspect-[3/4] ${`colorMap[selectedColor]`} rounded-lg transition-colors duration-300`}>
+             
+              {/* Suit preview */}
+              <div className={`relative aspect-[3/4] ${colorMap[selectedColor as keyof typeof colorMap]} rounded-lg transition-colors duration-300`}>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <Image 
+                  <Image
                     src={`/images/suits/${selectedMaterial.id}/${selectedButton}-${selectedLapel}.png`}
                     alt={`${selectedMaterial.name} suit in ${selectedColor} with ${selectedLapel} lapel`}
                     width={400}
@@ -641,11 +818,11 @@ export default function SuitConfigurator() {
                     priority
                   />
                 </div>
-                
+               
                 {/* Texture overlay */}
                 <div className={`absolute inset-0 opacity-20 rounded-lg ${selectedMaterial.texture}`}></div>
               </div>
-              
+             
               <div className="mt-4 text-center">
                 <h3 className="text-lg font-medium text-gray-900">
                   {selectedMaterial.name} {selectedButton === 'double' ? 'Double-Breasted' : 'Single-Breasted'} Suit
@@ -653,7 +830,7 @@ export default function SuitConfigurator() {
                 <p className="text-sm text-gray-500 capitalize">{selectedColor} • {selectedLapel} Lapel • {selectedFit} Fit</p>
               </div>
             </motion.div>
-            
+           
             {/* Tooltip for "Added to Cart" notification */}
             <AnimatePresence>
               {showTooltip && (
@@ -667,7 +844,7 @@ export default function SuitConfigurator() {
                 </motion.div>
               )}
             </AnimatePresence>
-            
+           
             {/* Mobile tab navigation */}
             {!isDesktop && (
               <div className="absolute bottom-0 inset-x-0 bg-white border-t border-gray-200 py-2 px-4">
@@ -675,7 +852,7 @@ export default function SuitConfigurator() {
                   {customizationOptions.slice(0, 5).map((option) => (
                     <button
                       key={option.id}
-                      onClick={() => setCurrentTab(option.id)}
+                      onClick={() => handleTabChange(option.id)}
                       className={`p-2 ${
                         currentTab === option.id ? 'text-blue-700' : 'text-gray-500'
                       }`}
@@ -684,26 +861,13 @@ export default function SuitConfigurator() {
                       <span className="text-xs block mt-1">{option.name}</span>
                     </button>
                   ))}
-                  <button
-                    onClick={() => setCurrentTab('more')}
-                    className={`p-2 ${
-                      currentTab === 'more' ? 'text-blue-700' : 'text-gray-500'
-                    }`}
-                  >
-                    <div className="w-6 h-6 mx-auto">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <circle cx="12" cy="12" r="1" fill="currentColor" />
-                        <circle cx="6" cy="12" r="1" fill="currentColor" />
-                        <circle cx="18" cy="12" r="1" fill="currentColor" />
-                      </svg>
-                    </div>
-                    <span className="text-xs block mt-1">More</span>
-                  </button>
                 </div>
               </div>
             )}
           </div>
-          
+         
+       
+         
           {/* Floating action button for mobile */}
           {!isDesktop && (
             <div className="fixed right-4 bottom-20 z-30">
@@ -718,7 +882,7 @@ export default function SuitConfigurator() {
               </motion.button>
             </div>
           )}
-          
+         
           {/* Desktop action buttons */}
           {isDesktop && (
             <div className="bg-white border-t border-gray-100 p-5 flex justify-between items-center">
@@ -727,7 +891,7 @@ export default function SuitConfigurator() {
                 <span className="text-sm text-gray-500 ml-2">Free shipping</span>
               </div>
               <div className="flex gap-3">
-                <button 
+                <button
                   className="px-6 py-2 border border-blue-700 text-blue-700 rounded-lg hover:bg-blue-50 transition-colors"
                 >
                   Save Design
@@ -750,3 +914,4 @@ export default function SuitConfigurator() {
     </div>
   );
 }
+

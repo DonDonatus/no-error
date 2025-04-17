@@ -8,6 +8,7 @@ import HelpButton from '@/components/HelpButton';
 import styles from './ProductDetail.module.css';
 import { FiShoppingCart } from 'react-icons/fi';
 import { useCart } from '@/components/CartContext'; // Import useCart hook
+import Link from 'next/link';
 
 // Sample product data - in a real app, this would come from an API or database
 const productData = [
@@ -119,10 +120,7 @@ export default function ProductDetail() {
     }
   };
 
-  const handleCustomizeSuit = () => {
-    // Implement suit customization functionality
-    alert('Opening suit customization');
-  };
+
 
   const handleCustomizeTrouser = () => {
     // Implement trouser customization functionality
@@ -189,9 +187,11 @@ export default function ProductDetail() {
               <button className={styles.addToCartButton} onClick={handleAddToCart}>
                 ADD TO CART
               </button>
-              <button className={styles.customizeButton} onClick={handleCustomizeSuit}>
+              <Link href="/customsuit">
+              <button className={styles.customizeButton} >
                 CUSTOMIZE SUIT
               </button>
+              </Link>
               <button className={styles.customizeButton} onClick={handleCustomizeTrouser}>
                 CUSTOMIZE TROUSER
               </button>

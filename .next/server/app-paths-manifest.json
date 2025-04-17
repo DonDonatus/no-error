@@ -1,6 +1,7 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/women/page": "app/women/page.js",
-  "/homepage/page": "app/homepage/page.js",
+  "/qr/page": "app/qr/page.js",
+  "/instructions/page": "app/instructions/page.js",
+  "/customsuit/page": "app/customsuit/page.js",
+  "/product/[id]/page": "app/product/[id]/page.js",
   "/accessories/page": "app/accessories/page.js"
 }

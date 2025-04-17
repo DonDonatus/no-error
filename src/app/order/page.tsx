@@ -1,4 +1,4 @@
-// app/order-confirmation/page.tsx
+// pages/order-confirmation.tsx
 'use client';
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
@@ -8,95 +8,27 @@ import styles from './OrderConfirmation.module.css';
 import Header from '@/components/Header';
 import HelpButton from '@/components/HelpButton';
 import { useCart } from '@/components/CartContext';
-import { useOrderHistory } from '@/components/OrderHistoryContext';
-
-// Define the CartItem interface
-interface CartItem {
-  name?: string;
-  size?: string;
-  description?: string;
-  image?: string;
-  materials?: string[];
-  care?: string[];
-}
 
 export default function OrderConfirmation() {
   const router = useRouter();
-  const { cartItems, updateCart } = useCart();
-  const { addOrder } = useOrderHistory();
+  const { updateCart } = useCart();
   const [orderNumber, setOrderNumber] = useState('');
-  const [orderCreated, setOrderCreated] = useState(false);
   
   useEffect(() => {
     // Generate random order number
     const randomOrderNum = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
     setOrderNumber(randomOrderNum);
     
-    // Only create order if this hasn't been done already
-    if (!orderCreated && cartItems && cartItems.length > 0) {
-      console.log("Cart items for order creation:", cartItems);
-      
-      const currentDate = new Date();
-      const formattedDate = `${currentDate.getDate().toString().padStart(2, '0')}/${
-        (currentDate.getMonth() + 1).toString().padStart(2, '0')}/${
-        currentDate.getFullYear()}`;
-      
-      // Format estimated delivery date (7 days from now)
-      const deliveryDate = new Date(currentDate);
-      deliveryDate.setDate(deliveryDate.getDate() + 7);
-      const formattedDeliveryDate = `${deliveryDate.getDate().toString().padStart(2, '0')}/${
-        (deliveryDate.getMonth() + 1).toString().padStart(2, '0')}/${
-        deliveryDate.getFullYear()}`;
-      
-      // Create an order object for each cart item
-      cartItems.forEach((item: CartItem) => {
-        const newOrder = {
-          id: randomOrderNum,
-          date: formattedDate,
-          status: 'In progress',
-          product: {
-            name: item.name || 'Product',
-            size: item.size || 'Standard',
-            description: item.description || 'New order',
-            image: item.image || '/images/placeholder.jpg',
-            materials: item.materials || ['Fabric blend'],
-            care: item.care || ['Wash as directed'],
-            delivery: {
-              tracking: 'DHL' + Math.floor(1000000000 + Math.random() * 9000000000),
-              estimatedDelivery: formattedDeliveryDate,
-              progress: 25 // Initial progress
-            }
-          }
-        };
-        
-        console.log("Adding new order to history:", newOrder);
-        // Add the order to order history
-        addOrder(newOrder);
-      });
-      
-      // Mark that orders have been created to prevent duplicate creation
-      setOrderCreated(true);
-    } else if (!cartItems || cartItems.length === 0) {
-      console.log("No items in cart to create orders from");
-    }
+    // Clear cart in context
+    updateCart([]);
     
-    // Clear cart in context after creating orders
-    if (!orderCreated) {
-      updateCart([]);
-    }
-  }, [cartItems, orderCreated, addOrder, updateCart]);
-  
-  useEffect(() => {
-    // Debug localStorage after orders have been created
-    if (orderCreated) {
-      console.log("Current localStorage:", localStorage.getItem('orderHistory'));
-    }
-  }, [orderCreated]);
+    
+  }, []);
   
   const handleContinueShopping = () => {
-    router.push('/');
+    router.push('/homepage');
   };
-  
+
   return (
     <>
       <Header />
@@ -126,10 +58,10 @@ export default function OrderConfirmation() {
             <div className={styles.infoSection}>
               <h3>Estimated Delivery</h3>
               <p>
-                {new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {
-                  weekday: 'long',
-                  month: 'long',
-                  day: 'numeric'
+                {new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { 
+                  weekday: 'long', 
+                  month: 'long', 
+                  day: 'numeric' 
                 })}
               </p>
             </div>
