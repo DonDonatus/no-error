@@ -10,6 +10,7 @@ import { FiShoppingCart } from 'react-icons/fi';
 import { useCart } from '@/components/CartContext'; // Import useCart hook
 import Link from 'next/link';
 
+
 // Sample product data - in a real app, this would come from an API or database
 const productData = [
   { 
@@ -123,8 +124,8 @@ export default function ProductDetail() {
 
 
   const handleCustomizeTrouser = () => {
-    // Implement trouser customization functionality
-    alert('Opening trouser customization');
+    
+    
   };
 
   const handleNotifyMe = () => {
@@ -192,9 +193,11 @@ export default function ProductDetail() {
                 CUSTOMIZE SUIT
               </button>
               </Link>
+              <Link href="/customtrouser">
               <button className={styles.customizeButton} onClick={handleCustomizeTrouser}>
                 CUSTOMIZE TROUSER
               </button>
+              </Link>
             </div>
             
             {/* Availability status */}

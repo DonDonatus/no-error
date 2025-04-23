@@ -287,7 +287,7 @@ export default function Home() {
                 />
                 <button
                   type="submit"
-                  className="bg-black text-white px-8 py-3 hover:bg-gray-800 transition-colors whitespace-nowrap"
+                  className="bg-[#08106c] text-white px-8 py-3 hover:bg-gray-800 transition-colors whitespace-nowrap"
                 >
                   SUBSCRIBE
                 </button>
