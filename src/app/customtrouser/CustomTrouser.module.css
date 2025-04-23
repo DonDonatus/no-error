@@ -1,0 +1,156 @@
+/* styles/CustomTrouser.module.css */
+.container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .main {
+    min-height: 100vh;
+    padding: 1rem 0;
+  }
+  
+  .title {
+    margin-bottom: 2rem;
+    text-align: center;
+    color: #333;
+    font-size: 2rem;
+  }
+  
+  .customizationContainer {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  
+  .optionsPanel {
+    flex: 1;
+    min-width: 300px;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .panelTitle {
+    background-color: #7986cb;
+    color: white;
+    padding: 1rem;
+    margin: 0;
+    font-size: 1.25rem;
+  }
+  
+  .optionCategory {
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .categoryButton {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-size: 1rem;
+  }
+  
+  .categoryButton:hover {
+    background-color: #e8eaf6;
+  }
+  
+  .categoryIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    background-color: #9fa8da;
+    border-radius: 4px;
+    margin-right: 1rem;
+  }
+  
+  .categoryName {
+    flex-grow: 1;
+  }
+  
+  .chevron {
+    margin-left: auto;
+  }
+  
+  .optionsList {
+    padding: 0.5rem 1rem;
+    display: none; /* Hidden by default, would show on click */
+  }
+  
+  .optionLabel {
+    display: block;
+    padding: 0.5rem 0;
+    cursor: pointer;
+  }
+  
+  .optionInput {
+    margin-right: 0.5rem;
+  }
+  
+  .productPreview {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .imageContainer {
+    margin-bottom: 1rem;
+  }
+  
+  .productImage {
+    object-fit: contain;
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .addToCartButton {
+    background-color: #1a237e;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+  }
+  
+  .addToCartButton:hover {
+    background-color: #303f9f;
+  }
+  
+  .productSummary {
+    width: 100%;
+    margin-top: 1rem;
+  }
+  
+  .productSummary h3 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .productSummary ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .productSummary li {
+    margin-bottom: 0.5rem;
+  }
+  
+  /* For mobile view */
+  @media (max-width: 768px) {
+    .customizationContainer {
+      flex-direction: column;
+    }
+    
+    .optionsPanel, .productPreview {
+      width: 100%;
+    }
+  }

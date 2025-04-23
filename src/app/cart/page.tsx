@@ -8,7 +8,6 @@ import styles from './ShoppingCart.module.css';
 import { useCart } from '@/components/CartContext';
 import Header from '@/components/Header';
 import HelpButton from '@/components/HelpButton';
-import Chatbot from '@/components/Chatbot';
 import ChatBotWidget from '@/components/ChatBotWidget';
 
 // Types for our cart items
