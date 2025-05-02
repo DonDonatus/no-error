@@ -1,9 +1,10 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
-  "/homepage/page": "app/homepage/page.js",
+  "/product/[id]/page": "app/product/[id]/page.js",
   "/signup/page": "app/signup/page.js",
-  "/signin/page": "app/signin/page.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
   "/account/page": "app/account/page.js",
-  "/api/user/update-profile/route": "app/api/user/update-profile/route.js",
-  "/api/user/profile/route": "app/api/user/profile/route.js"
+  "/api/user/profile/route": "app/api/user/profile/route.js",
+  "/api/user/measurements/route": "app/api/user/measurements/route.js",
+  "/signin/page": "app/signin/page.js"
 }
