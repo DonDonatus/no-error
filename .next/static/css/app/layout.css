@@ -2491,6 +2491,9 @@ video {
 .duration-500 {
   animation-duration: 500ms;
 }
+.running {
+  animation-play-state: running;
+}
 
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap');
 
