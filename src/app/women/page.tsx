@@ -5,9 +5,20 @@ import { usePathname } from 'next/navigation';
 import styles from './Header.module.css';
 import { FiSearch, FiBell, FiUser, FiShoppingCart, FiChevronDown, FiClock, FiFilter } from 'react-icons/fi';
 import Image from 'next/image';
+import Link from 'next/link';
 import Header from '@/components/Header';
-import HelpButton from "@/components/HelpButton";
+import HelpButton from '@/components/HelpButton';
 import { IconBaseProps, IconType } from 'react-icons';
+import { getProductsByCategory } from 'data/product';
+
+interface ProductType {
+  id: number
+  name: string;
+  image: string;
+  price: string;
+  rating: number;
+  brand: string;
+}
 
 interface Country {
   code: string;
@@ -24,7 +35,6 @@ const COUNTRIES: Country[] = [
   { code: 'IT', name: 'Italy', flag: '🇮🇹', language: 'it' },
 ];
 
-// Sample translations
 const translations: Record<string, Record<string, string>> = {
   en: {
     search: "Search",
@@ -43,7 +53,6 @@ const translations: Record<string, Record<string, string>> = {
     pants: "Pants",
     priceRange: "Price Range"
   },
-  // Add translations for other languages...
 };
 
 interface IconWrapperProps extends IconBaseProps {
@@ -51,12 +60,11 @@ interface IconWrapperProps extends IconBaseProps {
 }
 
 const IconWrapper: React.FC<IconWrapperProps> = ({ icon, ...props }) => {
-  // Use the as keyword to force TypeScript to accept this
   const Icon = icon as React.ComponentType<IconBaseProps>;
   return <Icon {...props} />;
 };
 
-export default function women() {
+export default function Homepage() {
   const pathname = usePathname();
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -64,8 +72,7 @@ export default function women() {
   const [selectedCountry, setSelectedCountry] = useState<Country>(COUNTRIES[0]);
   const [currentLanguage, setCurrentLanguage] = useState(selectedCountry.language);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  
-  // Filter states
+
   const [showOutOfStock, setShowOutOfStock] = useState(true);
   const [selectedProductTypes, setSelectedProductTypes] = useState({
     tuxedos: false,
@@ -75,7 +82,6 @@ export default function women() {
   const [priceRange, setPriceRange] = useState({ min: 10, max: 50 });
   const [filterOpen, setFilterOpen] = useState(false);
 
-  // Navigation items
   const navItems = [
     { id: 'men', label: translations[currentLanguage].men },
     { id: 'women', label: translations[currentLanguage].women, path: '/women'},
@@ -83,92 +89,8 @@ export default function women() {
     { id: 'exclusives', label: translations[currentLanguage].exclusives }
   ];
 
-  // Sample product data with image paths
-  const products = [
-    { 
-      id: 1, 
-      brand: 'Blue Blazer', 
-      name: 'Men suit', 
-      price: '$150.00', 
-      image: '/images/gre.png',
-      rating: 5
-    },
-    { 
-      id: 2, 
-      brand: 'Tuxedo', 
-      name: 'Men suit', 
-      price: '$150.00', 
-      image: '/images/gree.png',
-      rating: 5
-    },
-    { 
-      id: 3, 
-      brand: 'Tuxedo', 
-      name: 'Men suit', 
-      price: '$150.00', 
-      image: '/images/tux1.png',
-      rating: 5
-    },
-    { 
-      id: 4, 
-      brand: 'Office Suit', 
-      name: 'Men suit', 
-      price: '$150.00', 
-      image: '/images/busy2.jpg',
-      rating: 5
-    },
-    { 
-      id: 5, 
-      brand: 'Classic Suit', 
-      name: 'Women suit', 
-      price: '$180.00', 
-      image: '/images/clean.avif',
-      rating: 4
-    },
-    { 
-      id: 6, 
-      brand: 'Slim Fit', 
-      name: 'Women suit', 
-      price: '$200.00', 
-      image: '/images/purple1.jpg',
-      rating: 5
-    },
-    { 
-      id: 7, 
-      brand: 'Slim Fit', 
-      name: 'Men suit', 
-      price: '$200.00', 
-      image: '/images/blue1.png',
-      rating: 5
-    },
-    { 
-      id: 8, 
-      brand: 'Slim Fit', 
-      name: 'Men suit', 
-      price: '$200.00', 
-      image: '/images/pink.png',
-      rating: 4
-    },
-    { 
-      id: 9, 
-      brand: 'Slim Fit', 
-      name: 'Men suit', 
-      price: '$200.00', 
-      image: '/images/busy.jpg',
-      rating: 5
-    },
-    { 
-      id: 10, 
-      brand: 'Slim Fit', 
-      name: 'Men suit', 
-      price: '$200.00', 
-      image: '/images/white.png',
-      rating: 5
-    }
-    
-  ];
+  const products: ProductType[] = getProductsByCategory('women');
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -179,7 +101,6 @@ export default function women() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Update language when country changes
   useEffect(() => {
     setCurrentLanguage(selectedCountry.language);
   }, [selectedCountry]);
@@ -198,7 +119,7 @@ export default function women() {
   };
 
   const handleProductTypeChange = (type: keyof typeof selectedProductTypes) => {
-    setSelectedProductTypes((prev) => ({
+    setSelectedProductTypes(prev => ({
       ...prev,
       [type]: !prev[type]
     }));
@@ -220,100 +141,63 @@ export default function women() {
     <div className={styles.pageContainer}>
       <Header />
 
-      {/* Men Category Section */}
       <div className={styles.categorySection}>
         <h1 className={styles.categoryTitle}>Women</h1>
-        <div className={styles.categoryCount}>200 products</div>
+        <div className={styles.categoryCount}>{products.length} products</div>
       </div>
-      
-      {/* Product listing with filter */}
+
       <div className={styles.productContainer}>
-        {/* Product Grid */}
         <div className={styles.productGrid}>
-          {/* Filter overlay button - positioned absolutely */}
           <div className={styles.filterOverlayButton}>
-            <button 
-              className={styles.filterToggle}
-              onClick={toggleFilter}
-            >
-               <IconWrapper icon={FiFilter} className={styles.filterIcon} />
+            <button className={styles.filterToggle} onClick={toggleFilter}>
+              <IconWrapper icon={FiFilter} className={styles.filterIcon} />
               <span>{translations[currentLanguage].filter}</span>
               <IconWrapper icon={FiChevronDown} className={`${styles.chevron} ${filterOpen ? styles.rotate : ''}`} />
             </button>
           </div>
-          
-          {/* Filter sidebar - positioned absolutely when open */}
+
           {filterOpen && (
             <div className={styles.filterOverlay}>
               <div className={styles.filterOptions}>
-                {/* Out of Stock Filter */}
                 <div className={styles.filterSection}>
                   <h3>{translations[currentLanguage].outOfStock}:</h3>
-                  <div className={styles.filterOption}>
-                    <label className={styles.filterLabel}>
-                      <input
-                        type="radio"
-                        name="outOfStock"
-                        checked={showOutOfStock}
-                        onChange={() => handleOutOfStockChange(true)}
-                        className={styles.filterInput}
-                      />
-                      {translations[currentLanguage].show}
-                    </label>
-                  </div>
-                  <div className={styles.filterOption}>
-                    <label className={styles.filterLabel}>
-                      <input
-                        type="radio"
-                        name="outOfStock"
-                        checked={!showOutOfStock}
-                        onChange={() => handleOutOfStockChange(false)}
-                        className={styles.filterInput}
-                      />
-                      {translations[currentLanguage].hide}
-                    </label>
-                  </div>
+                  <label className={styles.filterLabel}>
+                    <input
+                      type="radio"
+                      name="outOfStock"
+                      checked={showOutOfStock}
+                      onChange={() => handleOutOfStockChange(true)}
+                      className={styles.filterInput}
+                    />
+                    {translations[currentLanguage].show}
+                  </label>
+                  <label className={styles.filterLabel}>
+                    <input
+                      type="radio"
+                      name="outOfStock"
+                      checked={!showOutOfStock}
+                      onChange={() => handleOutOfStockChange(false)}
+                      className={styles.filterInput}
+                    />
+                    {translations[currentLanguage].hide}
+                  </label>
                 </div>
-                
-                {/* Product Type Filter */}
+
                 <div className={styles.filterSection}>
                   <h3>{translations[currentLanguage].productType}:</h3>
-                  <div className={styles.filterOption}>
-                    <label className={styles.filterLabel}>
+                  {Object.keys(selectedProductTypes).map(type => (
+                    <label key={type} className={styles.filterLabel}>
                       <input
                         type="checkbox"
-                        checked={selectedProductTypes.tuxedos}
-                        onChange={() => handleProductTypeChange('tuxedos')}
+                        checked={selectedProductTypes[type as keyof typeof selectedProductTypes]}
+                        onChange={() => handleProductTypeChange(type as keyof typeof selectedProductTypes)}
                         className={styles.filterInput}
                       />
-                      {translations[currentLanguage].tuxedos}
+                      {translations[currentLanguage][type]}
                     </label>
-                  </div>
-                  <div className={styles.filterOption}>
-                    <label className={styles.filterLabel}>
-                      <input
-                        type="checkbox"
-                        checked={selectedProductTypes.blazers}
-                        onChange={() => handleProductTypeChange('blazers')}
-                        className={styles.filterInput}
-                      />
-                      {translations[currentLanguage].blazers}
-                    </label>
-                  </div>
-                  <div className={styles.filterOption}>
-                    <label className={styles.filterLabel}>
-                      <input
-                        type="checkbox"
-                        checked={selectedProductTypes.pants}
-                        onChange={() => handleProductTypeChange('pants')}
-                        className={styles.filterInput}
-                      />
-                      {translations[currentLanguage].pants}
-                    </label>
-                  </div>
+                  ))}
                 </div>
-                
-                {/* Price Range Filter with slider */}
+
                 <div className={styles.filterSection}>
                   <h3>{translations[currentLanguage].priceRange}:</h3>
                   <div className={styles.priceRangeContainer}>
@@ -346,30 +230,31 @@ export default function women() {
               </div>
             </div>
           )}
-          
-          {/* Actual product cards with images */}
-          {products.map(product => (
+
+          {products.map((product: ProductType) => (
             <div key={product.id} className={styles.productCard}>
-              <div className={styles.productImageContainer}>
-                <Image 
-                  src={product.image} 
-                  alt={product.name}
-                  width={300}
-                  height={400}
-                  className={styles.productImage}
-                  objectFit="cover"
-                />
-              </div>
-              <div className={styles.productInfo}>
-                <div className={styles.productBrand}>{product.brand}</div>
-                <div className={styles.productName}>{product.name}</div>
-                <div className={styles.productPrice}>{product.price}</div>
-                <div className={styles.productRating}>
-                  {Array(product.rating).fill(0).map((_, i) => (
-                    <span key={i} className={styles.starIcon}>★</span>
-                  ))}
+              <Link href={`/product/${product.id}`}>
+                <div className={styles.productImageContainer}>
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    width={300}
+                    height={400}
+                    className={styles.productImage}
+                    objectFit="cover"
+                  />
                 </div>
-              </div>
+                <div className={styles.productInfo}>
+                  <div className={styles.productBrand}>{product.brand}</div>
+                  <div className={styles.productName}>{product.name}</div>
+                  <div className={styles.productPrice}>{product.price}</div>
+                  <div className={styles.productRating}>
+                    {Array(product.rating).fill(0).map((_, i) => (
+                      <span key={i} className={styles.starIcon}>★</span>
+                    ))}
+                  </div>
+                </div>
+              </Link>
             </div>
           ))}
         </div>
@@ -378,4 +263,3 @@ export default function women() {
     </div>
   );
 }
-

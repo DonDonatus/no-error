@@ -1,680 +1,580 @@
-/* Existing styles from your current CSS file */
+
+
 .pageContainer {
-    width: 100%;
-    height: 100%;
-  }
-  
-  .header {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    border-bottom: 1px solid #eaeaea;
-  }
-  
-  .navContainer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 1.5rem;
-    height: 4rem;
-  }
-  
-  .navLeft, .navRight {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  
-  .searchContainer {
-    position: relative;
-  }
-  
-  
-  
-  
-  
-  .iconButton {
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    padding: 0.5rem;
-  }
-  
-  .user:hover {
-    background-color: #08106C;
-  }
-  
-  .icon {
-    font-size: 1.25rem;
-    color: #333;
-  }
-  
-  .searchText {
-    margin-left: 0.5rem;
-  }
-  
-  .searchInput {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 0.5rem;
-    width: 200px;
-  }
-  
-  .countrySelector {
-    position: relative;
-  }
-  
-  .countryButton {
-    display: flex;
-    align-items: center;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem;
-  }
-  
-  .flag {
-    font-size: 1.25rem;
-    margin-right: 0.25rem;
-  }
-  
-  .chevron {
-    font-size: 1rem;
-    transition: transform 0.2s;
-  }
-  
-  .rotate {
-    transform: rotate(180deg);
-  }
-  
-  .countryDropdown {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    width: 180px;
-    z-index: 10;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .countryOption {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: none;
-    background: none;
-    text-align: left;
-    cursor: pointer;
-  }
-  
-  .countryOption:hover {
-    background: #f5f5f5;
-  }
-  
-  .selected {
-    background: #f0f0f0;
-    font-weight: bold;
-  }
-  
-  .cartBadge {
-    background: #08106C;
-    color: white;
-    font-size: 0.75rem;
-    width: 1rem;
-    height: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    position: absolute;
-    top: 50px;
-    right: 20px;
-  }
-  
-  .navMenu {
-    border-top: 1px solid #eaeaea;
-    border-bottom: 1px solid #eaeaea;
-    
-  }
-  
-  .navList {
-    display: flex;
-    list-style: none;
-    padding: 0 ;
-    margin: 0 ;
-    justify-content: center;
-  }
-  
-  .navItem {
-    position: relative;
-    padding: 0px 50px;
-   display: inline-block;
-  }
-  
-  .navLink {
-    display: block;
-    padding: 1rem 2rem;
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-    transition: color 0.2s;
-  }
-  
-  .navLink:hover, .navLink.active {
-    color:#1a237e;
-  }
-  
-  .active {
-    border-bottom: 2px solid #08106C;
-  }
-  
-  .announcementContainer {
-    background: #08106C;
-    color: white;
-    padding: 0.5rem 0;
-    width: 100%;
-    overflow: hidden;
-    position: relative;
-  }
-  
-  .announcementScroll {
-    white-space: nowrap;
-    display: inline-block;
-    will-change: transform;
-  }
-  
-  .announcement {
-    display: inline-block;
-    padding: 0 2rem;
-    font-weight: 500;
-  }
-  
-  /* Updated Category Section */
-  .categorySection {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0.2rem 0;
-    text-align: center;
-  }
-  
-  .categoryTitle {
-    font-size: 2rem;
-    font-weight: 600;
-    margin: 0;
-    color: #08106C;
-    text-transform: uppercase;
-    
-  }
-  
-  .categoryCount {
-    margin-top: 0.2rem;
-    color: #666;
-    font-size: 0.875rem;
-  }
-  
-  /* Product container and filter styles */
-  .productContainer {
-    display: flex;
-    padding: 0 1.5rem 2rem;
-    border-radius: 10;
-  }
-  
-  .filterSidebar {
-    width: 250px;
-    padding-right: 2rem;
-  }
-  
-  .filterToggle {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem 0;
-    font-weight: 500;
-    font-size: 1rem;
-    color: #333;
-  }
-  
-  .filterIcon {
-    font-size: 1.25rem;
-  }
-  
-  .filterOptions {
-    margin-top: 1rem;
-  }
-  
-  .filterSection {
-    margin-bottom: 1.5rem;
-  }
-  
-  .filterSection h3 {
-    font-size: 1rem;
-    font-weight: 500;
-    margin: 0 0 0.75rem;
-    color: #333;
-  }
-  
-  .filterOption {
-    margin-bottom: 0.5rem;
-  }
-  
-  .filterLabel {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    font-size: 0.875rem;
-  }
-  
-  .filterInput {
-    margin-right: 0.5rem;
-  }
-  
-  /* Price Range Slider Styles */
-  .priceRangeContainer {
-    width: 100%;
-    margin-top: 1rem;
-  }
-  
-  .priceDisplay {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
-    font-size: 0.75rem;
-    color: #666;
-  }
-  
-  .sliderContainer {
-    position: relative;
-    height: 30px;
-  }
-  
-  .slider {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    -webkit-appearance: none;
-    appearance: none;
-    height: 2px;
-    background: #ddd;
-    outline: none;
-  }
-  
-  .slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: #a07b43;
-    cursor: pointer;
-    border: 2px solid white;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  }
-  
-  .slider::-moz-range-thumb {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: #a07b43;
-    cursor: pointer;
-    border: 2px solid white;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  }
-  
-  /* Product Grid Styles */
-  .productGrid {
-    flex: 1;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 2rem;
-  }
-  
-  .productCard {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .productImageContainer {
-    position: relative;
-    padding-bottom: 133%; /* 3:4 aspect ratio */
-    background-color: #f9f9f9;
-    margin-bottom: 0.75rem;
-    overflow: hidden;
-    border-radius: 18px;
-  }
-  
-  .productImage {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-  }
-  
-  .productImageContainer:hover .productImage {
-    transform: scale(1.05);
-  }
-  
-  .productInfo {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .productBrand {
-    font-weight: bold;
-    margin-bottom: 0.25rem;
-    font-size: 1.05rem;
-  }
-  
-  .productName {
-    color: black;
-    margin-bottom: 0.25rem;
-    font-weight: lighter;
-  }
-  
-  .productPrice {
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-    font-size: 1.05rem;
-  }
-  
-  .productRating {
-    color: #0342b6;
-    font-size: 0.875rem;
-  }
-  
-  .starIcon {
-    margin-right: 0.125rem;
-  }
-  
-  
-  
-  
-  
-  /* Add these to your Header.module.css */
-  
-  .productContainer {
-    position: relative;
-    padding: 20px;
-  }
-  
-  .filterOverlayButton {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 10;
-  }
-  
-  .filterOverlay {
-    position: absolute;
-    top: 60px;
-    left: 20px;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    width: 250px;
-  }
-  
-  .filterToggle {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: #f5f5f5;
-    padding: 10px 15px;
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .productImageContainer {
-    width: 100%;
-    height: 300px;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .productImage {
-    width: 100%;
-    height: 100%;
-    transition: transform 0.3s ease;
-  }
-  
-  .productCard:hover .productImage {
-    transform: scale(1.05);
-  }
-  
-  .productGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    margin-top: 60px; /* Give space for filter button */
-  }
-  
-  #men{
-    padding-right: 100px ;
-  }
-  
-  #header{
-    position: fixed;
-  }
-  
-  .help-button {
-    position: fixed;
-    bottom: 24px;
-    left: 24px;
-    width: 40px;
-    height: 40px;
-    background-color: #08106C; /* or use the blue from the image */
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    z-index: 50;
-  }
-  
-  .help-button:hover {
-    background-color: #08106C;
-  }
-  
-  /* Notification Badge */
-  .notificationBadge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background-color: #ff3b30;
-    color: white;
-    font-size: 10px;
-    font-weight: 600;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  /* Notification Container */
-  .notificationContainer {
-    position: relative;
-  }
-  
-  /* Notification Dropdown */
-  .notificationDropdown {
-    position: absolute;
-    top: 40px;
-    right: 50; 
-    width: 370px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    overflow: hidden;
-    max-height: 500px;
-  }
-  
-  /* Notification Header */
-  .notificationHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    border-bottom: 1px solid #eee;
-  }
-  
-  .notificationHeader h3 {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 600;
-  }
-  
-  .closeButton {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #888;
-  }
-  
-  /* Tab Container */
-  .tabContainer {
-    display: flex;
-    border-bottom: 1px solid #eee;
-  }
-  
-  .tabButton {
-    flex: 1;
-    padding: 10px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    color: #555;
-    text-align: center;
-  }
-  
-  .activeTab {
-    font-weight: 600;
-    color: #08106C;
-    box-shadow: inset 0 -2px 0 #08106C;
-  }
-  
-  /* Notification List */
-  .notificationList {
-    overflow-y: auto;
-    max-height: 400px;
-  }
-  
-  .notificationDate {
-    padding: 10px 20px;
-    font-size: 14px;
-    color: #888;
-    font-weight: 500;
-  }
-  
-  .notificationItem {
-    display: flex;
-    padding: 15px 20px;
-    border-bottom: 1px solid #f5f5f5;
-    transition: background-color 0.2s;
-  }
-  
-  .notificationItem:hover {
-    background-color: #f9f9f9;
-  }
-  
-  .unread {
-    background-color: #f0f7ff;
-  }
-  
-  .unread:hover {
-    background-color: #e5f1ff;
-  }
-  
-  /* Notification Icon */
-  .notificationIcon {
-    margin-right: 15px;
-  }
-  
-  .iconCircle {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #f5f5f5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #666;
-  }
-  
-  /* Notification Content */
-  .notificationContent {
-    flex: 1;
-  }
-  
-  .notificationContent h4 {
-    margin: 0 0 5px;
-    font-size: 14px;
-    font-weight: 600;
-  }
-  
-  .notificationContent p {
-    margin: 0 0 8px;
-    font-size: 13px;
-    color: #666;
-  }
-  
-  .notificationTime {
-    font-size: 12px;
-    color: #999;
-  }
-  
-  /* Notification Actions */
-  .notificationActions {
-    display: flex;
-    margin-top: 10px;
-    gap: 10px;
-  }
-  
-  .reviewButton {
-    padding: 5px 15px;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    background: white;
-    font-size: 12px;
-    cursor: pointer;
-  }
-  
-  .markReadButton {
-    padding: 5px 15px;
-    border: none;
-    border-radius: 20px;
-    background: none;
-    font-size: 12px;
-    color: #444;
-    cursor: pointer;
-  }
-  
-  .emptyNotifications {
-    padding: 30px;
-    text-align: center;
-    color: #888;
-    font-size: 14px;
-  }
+  width: 100%;
+  height: 100%;
+}
+
+
+.header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #eaeaea;
+}
+
+
+.navContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  height: 4rem;
+}
+
+
+.navLeft, .navRight {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+
+.searchContainer {
+  position: relative;
+}
+
+
+.iconButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+}
+
+
+.icon {
+  font-size: 1.25rem;
+  color: #333;
+}
+
+
+.searchText {
+  margin-left: 0.5rem;
+}
+
+
+.searchInput {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0.5rem;
+  width: 200px;
+}
+
+
+.countrySelector {
+  position: relative;
+}
+
+
+.countryButton {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+
+.flag {
+  font-size: 1.25rem;
+  margin-right: 0.25rem;
+}
+
+
+.chevron {
+  font-size: 1rem;
+  transition: transform 0.2s;
+}
+
+
+.rotate {
+  transform: rotate(180deg);
+}
+
+
+.countryDropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 180px;
+  z-index: 10;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.countryOption {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+
+.countryOption:hover {
+  background: #f5f5f5;
+}
+
+
+.selected {
+  background: #f0f0f0;
+  font-weight: bold;
+}
+
+
+.navMenu {
+  border-top: 1px solid #eaeaea;
+  border-bottom: 1px solid #eaeaea;
+}
+
+
+.navList {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  justify-content: center;
+}
+
+
+.navItem {
+  position: relative;
+  padding: 0px 50px;
+  display: inline-block;
+}
+
+
+.navLink {
+  display: block;
+  padding: 1rem 2rem;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+
+.navLink:hover, .navLink.active {
+  color: #1a237e;
+}
+
+
+.active {
+  border-bottom: 2px solid #08106C;
+}
+
+
+.announcementContainer {
+  background: #08106C;
+  color: white;
+  padding: 0.5rem 0;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+
+.announcementScroll {
+  white-space: nowrap;
+  display: inline-block;
+  will-change: transform;
+}
+
+
+.announcement {
+  display: inline-block;
+  padding: 0 2rem;
+  font-weight: 500;
+}
+
+
+/* Notification Badge */
+.notificationBadge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #ff3b30;
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* Notification Container */
+.notificationContainer {
+  position: relative;
+}
+
+
+/* Notification Dropdown */
+.notificationDropdown {
+  position: absolute;
+  top: 40px;
+  right: 50;
+  width: 370px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  overflow: hidden;
+  max-height: 500px;
+}
+
+
+/* Notification Header */
+.notificationHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+
+.notificationHeader h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #888;
+}
+
+
+/* Tab Container */
+.tabContainer {
+  display: flex;
+  border-bottom: 1px solid #eee;
+}
+
+
+.tabButton {
+  flex: 1;
+  padding: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #555;
+  text-align: center;
+}
+
+
+.activeTab {
+  font-weight: 600;
+  color: #08106C;
+  box-shadow: inset 0 -2px 0 #08106C;
+}
+
+
+/* Notification List */
+.notificationList {
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+
+.notificationDate {
+  padding: 10px 20px;
+  font-size: 14px;
+  color: #888;
+  font-weight: 500;
+}
+
+
+.notificationItem {
+  display: flex;
+  padding: 15px 20px;
+  border-bottom: 1px solid #f5f5f5;
+  transition: background-color 0.2s;
+}
+
+
+.notificationItem:hover {
+  background-color: #f9f9f9;
+}
+
+
+.unread {
+  background-color: #f0f7ff;
+}
+
+
+.unread:hover {
+  background-color: #e5f1ff;
+}
+
+
+/* Notification Icon */
+.notificationIcon {
+  margin-right: 15px;
+}
+
+
+.iconCircle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+}
+
+
+/* Notification Content */
+.notificationContent {
+  flex: 1;
+}
+
+
+.notificationContent h4 {
+  margin: 0 0 5px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+.notificationContent p {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #666;
+}
+
+
+.notificationTime {
+  font-size: 12px;
+  color: #999;
+}
+
+
+/* Notification Actions */
+.notificationActions {
+  display: flex;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+
+.reviewButton {
+  padding: 5px 15px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  background: white;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+
+.markReadButton {
+  padding: 5px 15px;
+  border: none;
+  border-radius: 20px;
+  background: none;
+  font-size: 12px;
+  color: #444;
+  cursor: pointer;
+}
+
+
+.emptyNotifications {
+  padding: 30px;
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+}
+
+
+/* Hover effect for icon buttons */
+.hoverEffect:hover,
+.iconButton:hover {
+  color: #A07B43;
+  transform: translateY(-2px);
+  transition: all 0.2s ease;
+}
+
+
+/* Profile styles */
+.profileButton {
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+
+.profileImageContainer {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+  border: 1.6px solid #08106C;
+  transition: all 0.2s ease;
+}
+
+
+.profileButton:hover .profileImageContainer {
+  border: 3px solid #08106C;
+  transform: scale(1.05);
+}
+
+
+.profileImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+.profileInitials {
+  font-size: 16px;
+  font-weight: 600;
+  color: #555;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+
+/* Account dropdown styles */
+.accountContainer {
+  position: relative;
+}
+
+
+.accountDropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  margin-top: 10px;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+
+.accountOption {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  text-decoration: none;
+  color: #333;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+
+.accountOption:hover {
+  background-color: #f5f5f5;
+  color: #08106C;
+}
+
+
+.accountOption:not(:last-child) {
+  border-bottom: 1px solid #eee;
+}
+
+
+.dropdownIcon {
+  margin-right: 12px;
+  font-size: 18px;
+}
+
+
+/* Cart styles */
+.cartIconContainer {
+  position: relative;
+  display: inline-flex;
+}
+
+
+.cartBadge {
+  position: absolute;
+  top: -11px;
+  right: -15px;
+  background-color: #08106C;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  pointer-events: none;
+}
+
+
+.cartButton:hover .cartBadge {
+  top: -11px !important;
+  right: -15px !important;
+}
+
+
+/* Added to cart toast notification */
+.addedToast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #08106C;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  animation: fadeInOut 3s forwards;
+}
+
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(20px); }
+  10% { opacity: 1; transform: translateY(0); }
+  90% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(20px); }
+}
+
+
+
+
+
+
 

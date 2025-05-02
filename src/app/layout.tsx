@@ -3,6 +3,7 @@ import { Open_Sans, Montserrat } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from '@/components/CartContext';
 import { OrderHistoryProvider } from '@/components/OrderHistoryContext';
+import { Providers } from "@/app/providers";
 
 const openSans = Open_Sans({ 
   subsets: ["latin"],
@@ -25,11 +26,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
+        <Providers>
       <CartProvider>
         <OrderHistoryProvider>
         {children}
         </OrderHistoryProvider>
       </CartProvider>
+      </Providers>
       </body>
     </html>
   );
