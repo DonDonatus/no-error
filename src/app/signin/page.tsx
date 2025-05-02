@@ -7,6 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface SignInFormData {
   email: string;
@@ -14,11 +17,23 @@ interface SignInFormData {
   remember: boolean;
 }
 
-export default function signin() {
+export default function Signin() {
   const { register, handleSubmit } = useForm<SignInFormData>();
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
 
-  const onSubmit = (data: SignInFormData) => {
-    console.log(data);
+  const onSubmit = async (data: SignInFormData) => {
+    const res = await signIn("credentials", {
+      redirect: false,
+      email: data.email,
+      password: data.password,
+    });
+
+    if (res?.ok) {
+      router.push("/homepage");
+    } else {
+      setError("Invalid email or password");
+    }
   };
 
   return (
@@ -44,21 +59,15 @@ export default function signin() {
             />
           </div>
 
-          {/* Sign in heading */}
-          <h1 className="font-['Open_Sans',Helvetica] font-bold text-black text-[40px] text-center mb-2">
-            Sign in
-          </h1>
-
-          <p className="font-['Montserrat',Helvetica] font-light text-black text-lg text-center mb-8">
-            Enter email and password to sign in
-          </p>
+          <h1 className="font-bold text-[40px] text-center mb-2">Sign in</h1>
+          <p className="text-lg text-center mb-8">Enter email and password to sign in</p>
 
           <Card className="w-full max-w-[412px] border-none shadow-none">
             <CardContent className="p-0 space-y-6">
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                {/* Email input */}
+                {/* Email */}
                 <div className="relative">
-                  <label className="absolute left-0 top-1/2 -translate-y-1/2 font-['Montserrat',Helvetica] font-thin text-black text-[17px] z-10 pl-2">
+                  <label className="absolute left-0 top-1/2 -translate-y-1/2 z-10 pl-2">
                     Email:
                   </label>
                   <Input
@@ -68,9 +77,9 @@ export default function signin() {
                   />
                 </div>
 
-                {/* Password input */}
+                {/* Password */}
                 <div className="relative">
-                  <label className="absolute left-0 top-1/2 -translate-y-1/2 font-['Montserrat',Helvetica] font-thin text-black text-[17px] z-10 pl-2">
+                  <label className="absolute left-0 top-1/2 -translate-y-1/2 z-10 pl-2">
                     Password:
                   </label>
                   <Input
@@ -80,35 +89,21 @@ export default function signin() {
                   />
                 </div>
 
-                {/* Remember me checkbox */}
                 <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="remember"
-                    className="h-[27px] w-[31px] rounded-[3px] border-black"
-                  />
-                  <label
-                    htmlFor="remember"
-                    className="font-['Montserrat',Helvetica] font-light text-black text-[17px]"
-                  >
-                    Remember me?
-                  </label>
+                  <Checkbox id="remember" className="h-[27px] w-[31px]" />
+                  <label htmlFor="remember">Remember me?</label>
                 </div>
-                
 
-                {/* Sign in button */}
-               <div>
-                <Link href="/homepage"><Button
-                  type="submit"
-                  className="w-full h-11 bg-[#08106c] hover:bg-[#08106c]/90 rounded-[10px] font-['Open_Sans',Helvetica] font-bold text-[22px]"
-                >
+                {error && (
+                  <p className="text-red-500 text-sm text-center">{error}</p>
+                )}
+
+                <Button type="submit" className="w-full h-11 bg-[#08106c] rounded-[10px] text-[22px]">
                   Sign in
-                </Button></Link>
-                </div>
+                </Button>
 
-
-                {/* Sign up link */}
-                <div className="text-center font-['Montserrat',Helvetica] text-lg">
-                  <span className="font-light text-black">No account?</span>{" "}
+                <div className="text-center text-lg">
+                  <span>No account?</span>{" "}
                   <Link href="/signup" className="font-bold text-[#08106c]">
                     Sign up here
                   </Link>
@@ -120,5 +115,4 @@ export default function signin() {
       </div>
     </main>
   );
-};
-
+}

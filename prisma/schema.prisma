@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  email         String        @unique
+  name          String?
+  password      String
+  phoneNumber   String?
+  profilePic    String?       // Added profile picture field
+  role          Role          @default(CUSTOMER)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  orders        Order[]
+  measurements  Measurement[]
+}
+
+model Order {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String        @db.ObjectId
+  user          User          @relation(fields: [userId], references: [id])
+  orderNumber   String        @unique
+  status        OrderStatus   @default(PENDING)
+  totalAmount   Float
+  items         Item[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  deliveryDate  DateTime?
+}
+
+model Item {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  orderId     String      @db.ObjectId
+  order       Order       @relation(fields: [orderId], references: [id])
+  name        String
+  description String?
+  price       Float
+  quantity    Int         @default(1)
+}
+
+model Measurement {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String    @unique @db.ObjectId   // 👈 Enforce 1-to-1
+  user            User      @relation(fields: [userId], references: [id])
+  chest           Float?   
+  waist           Float?
+  hip             Float?
+  shoulder        Float?
+  inseam          Float?
+  outseam         Float?
+  sleeveLength    Float?
+  neck            Float?
+  notes           String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Product {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  brand           String
+  description     String
+  image           String
+  price           Float
+  rating          Int
+  reviewCount     Int
+  availability    Boolean  @default(true)
+  material        String?
+  careInstructions String?
+  sizes           String[] 
+  colors          String[] 
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+
+enum Role {
+  ADMIN
+  TAILOR
+  CUSTOMER
+}
+
+enum OrderStatus {
+  PENDING
+  IN_PROGRESS
+  READY_FOR_PICKUP
+  DELIVERED
+  CANCELLED
+}

@@ -1,13 +1,17 @@
 "use client";
 
+
 import { useEffect, useRef, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import styles from './header.module.css';
-import { FiSearch, FiBell, FiUser, FiShoppingCart, FiChevronDown, FiClock } from 'react-icons/fi';
+import { FiSearch, FiBell, FiUser, FiShoppingCart, FiChevronDown, FiClock, FiLogOut } from 'react-icons/fi';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useCart } from './CartContext'; // Import from the new file;
+import { useCart } from './CartContext';
 import { IconBaseProps, IconType } from 'react-icons';
+import { signOut } from "next-auth/react";
+
+
 
 
 interface Country {
@@ -17,6 +21,7 @@ interface Country {
   language: string;
 }
 
+
 interface Notification {
   id: string;
   title: string;
@@ -24,6 +29,7 @@ interface Notification {
   time: string;
   read: boolean;
 }
+
 
 const COUNTRIES: Country[] = [
   { code: 'US', name: 'United States', flag: '🇺🇸', language: 'en' },
@@ -33,7 +39,7 @@ const COUNTRIES: Country[] = [
   { code: 'IT', name: 'Italy', flag: '🇮🇹', language: 'it' },
 ];
 
-// Sample notifications data
+
 const SAMPLE_NOTIFICATIONS: Notification[] = [
   {
     id: '1',
@@ -86,6 +92,7 @@ const SAMPLE_NOTIFICATIONS: Notification[] = [
   }
 ];
 
+
 const translations: Record<string, Record<string, string>> = {
   en: {
     search: "Search",
@@ -110,7 +117,9 @@ const translations: Record<string, Record<string, string>> = {
     markAsRead: "Mark As Read",
     review: "Review",
     cart: "Cart",
-    addedToCart: "Added to cart!"
+    addedToCart: "Added to cart!",
+    profile: "Profile",
+    logout: "Logout"
   },
   fr: {
     search: "Rechercher",
@@ -119,7 +128,8 @@ const translations: Record<string, Record<string, string>> = {
     women: "Femmes",
     accessories: "Accessoires",
     exclusives: "Exclusifs",
-    // Add other French translations as needed
+    profile: "Profil",
+    logout: "Déconnexion"
   },
   de: {
     search: "Suchen",
@@ -128,7 +138,8 @@ const translations: Record<string, Record<string, string>> = {
     women: "Damen",
     accessories: "Accessoires",
     exclusives: "Exklusiv",
-    // Add other German translations as needed
+    profile: "Profil",
+    logout: "Abmelden"
   },
   it: {
     search: "Cerca",
@@ -137,21 +148,25 @@ const translations: Record<string, Record<string, string>> = {
     women: "Donna",
     accessories: "Accessori",
     exclusives: "Esclusivi",
-    // Add other Italian translations as needed
+    profile: "Profilo",
+    logout: "Esci"
   }
 };
+
 
 interface IconWrapperProps extends IconBaseProps {
   icon: IconType;
 }
 
+
 const IconWrapper: React.FC<IconWrapperProps> = ({ icon, ...props }) => {
-  // Use the as keyword to force TypeScript to accept this
   const Icon = icon as React.ComponentType<IconBaseProps>;
   return <Icon {...props} />;
 };
 
+
 export default function Header() {
+  const router = useRouter();
   const pathname = usePathname();
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -160,28 +175,66 @@ export default function Header() {
   const [currentLanguage, setCurrentLanguage] = useState(selectedCountry.language);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const notificationRef = useRef<HTMLDivElement>(null);
-  
-  // Notification state
+  const accountDropdownRef = useRef<HTMLDivElement>(null);
+ 
+  const [isAccountOpen, setIsAccountOpen] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>(SAMPLE_NOTIFICATIONS);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
+  const [profilePic, setProfilePic] = useState<string | null>(null);
+  const [username, setUsername] = useState<string>('');
 
-  // Use the shared CartContext
+
   const { cartCount, showAddedToast } = useCart();
+
 
   const navItems = [
     { id: 'men', label: translations[currentLanguage]?.men || translations.en.men, path: '/homepage' },
     { id: 'women', label: translations[currentLanguage]?.women || translations.en.women, path: '/women' },
     { id: 'accessories', label: translations[currentLanguage]?.accessories || translations.en.accessories, path: '/accessories' },
-    { id: 'exclusives', label: translations[currentLanguage]?.exclusives || translations.en.exclusives, path: '/exclusives' }
+    { id: 'exclusives', label: translations[currentLanguage]?.exclusives || translations.en.exclusives, path: '/exclusive' }
   ];
+
 
   const unreadCount = notifications.filter(notification => !notification.read).length;
 
-  // Get translations safely
-  const getTranslation = (key: string) => {
-    return translations[currentLanguage]?.[key] || translations.en[key] || key;
-  };
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch('/api/user/profile');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.user) {
+            setProfilePic(data.user.profilePic || null);
+            setUsername(data.user.name || '');
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+
+    fetchUserData();
+
+
+    const handleProfilePicUpdate = (event: CustomEvent) => {
+      setProfilePic(event.detail.profilePic);
+      if (event.detail.username) {
+        setUsername(event.detail.username);
+      }
+    };
+
+
+    window.addEventListener('profilePicUpdated', handleProfilePicUpdate as EventListener);
+
+
+    return () => {
+      window.removeEventListener('profilePicUpdated', handleProfilePicUpdate as EventListener);
+    };
+  }, []);
+
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -191,14 +244,43 @@ export default function Header() {
       if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
         setIsNotificationOpen(false);
       }
+      if (accountDropdownRef.current && !accountDropdownRef.current.contains(event.target as Node)) {
+        setIsAccountOpen(false);
+      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+
   useEffect(() => {
     setCurrentLanguage(selectedCountry.language);
   }, [selectedCountry]);
+
+
+  const getInitials = () => {
+    if (!username) return '';
+    const parts = username.split(' ');
+    let initials = parts[0].charAt(0).toUpperCase();
+    if (parts.length > 1) {
+      initials += parts[parts.length - 1].charAt(0).toUpperCase();
+    }
+    return initials;
+  };
+
+
+  const getTranslation = (key: string) => {
+    return translations[currentLanguage]?.[key] || translations.en[key] || key;
+  };
+
+
+  const handleLogout = async () => {
+    await signOut({
+      redirect: true,  // Redirects to `/signin` after logout
+      callbackUrl: "/signin"
+    });
+  };
+
 
   const toggleSearch = () => {
     setSearchOpen(!searchOpen);
@@ -209,26 +291,36 @@ export default function Header() {
     }
   };
 
+
   const toggleNotifications = () => {
     setIsNotificationOpen(!isNotificationOpen);
   };
 
+
+  const toggleAccountDropdown = () => {
+    setIsAccountOpen(!isAccountOpen);
+  };
+
+
   const markAsRead = (id: string) => {
     setNotifications(
-      notifications.map(notification => 
+      notifications.map(notification =>
         notification.id === id ? { ...notification, read: true } : notification
       )
     );
   };
 
-  const filteredNotifications = activeTab === 'all' 
-    ? notifications 
+
+  const filteredNotifications = activeTab === 'all'
+    ? notifications
     : notifications.filter(notification => !notification.read);
+
 
   return (
     <div className={styles.pageContainer} id="header">
       <header className={styles.header}>
         <AnnouncementBar announcements={[getTranslation('announcements')]} />
+
 
         <div className={styles.navContainer}>
           <div className={styles.navLeft}>
@@ -240,6 +332,7 @@ export default function Header() {
                 )}
               </button>
 
+
               {isNotificationOpen && (
                 <div className={styles.notificationDropdown}>
                   <div className={styles.notificationHeader}>
@@ -248,15 +341,15 @@ export default function Header() {
                       ×
                     </button>
                   </div>
-                  
+                 
                   <div className={styles.tabContainer}>
-                    <button 
+                    <button
                       className={`${styles.tabButton} ${activeTab === 'all' ? styles.activeTab : ''}`}
                       onClick={() => setActiveTab('all')}
                     >
                       {getTranslation('all')}
                     </button>
-                    <button 
+                    <button
                       className={`${styles.tabButton} ${activeTab === 'unread' ? styles.activeTab : ''}`}
                       onClick={() => setActiveTab('unread')}
                     >
@@ -264,13 +357,14 @@ export default function Header() {
                     </button>
                   </div>
 
+
                   <div className={styles.notificationList}>
                     {filteredNotifications.length > 0 ? (
                       <>
                         <div className={styles.notificationDate}>
                           {getTranslation('today')}
                         </div>
-                        
+                       
                         {filteredNotifications.map(notification => (
                           <div key={notification.id} className={`${styles.notificationItem} ${!notification.read ? styles.unread : ''}`}>
                             <div className={styles.notificationIcon}>
@@ -285,13 +379,13 @@ export default function Header() {
                               <h4>{notification.title}</h4>
                               <p>{notification.message}</p>
                               <span className={styles.notificationTime}>{notification.time}</span>
-                              
+                             
                               <div className={styles.notificationActions}>
                                 <button className={styles.reviewButton}>
                                   {getTranslation('review')}
                                 </button>
                                 {!notification.read && (
-                                  <button 
+                                  <button
                                     className={styles.markReadButton}
                                     onClick={() => markAsRead(notification.id)}
                                   >
@@ -313,6 +407,7 @@ export default function Header() {
               )}
             </div>
 
+
             <div className={styles.searchContainer}>
               {searchOpen ? (
                 <input
@@ -333,7 +428,8 @@ export default function Header() {
             </div>
           </div>
 
-          <div style={{ 
+
+          <div style={{
             color: '#A07B43',
             fontFamily: 'Xenus',
             fontWeight: 580,
@@ -342,6 +438,7 @@ export default function Header() {
             UOMO MIGLIORE
           </div>
 
+
           <div className={styles.navRight}>
             <div className={styles.countrySelector} ref={dropdownRef}>
               <button
@@ -349,8 +446,9 @@ export default function Header() {
                 className={styles.countryButton}
               >
                 <span className={styles.flag}>{selectedCountry.flag}</span>
-                <IconWrapper icon={FiChevronDown} className={`{styles.chevron} ${isCountryOpen ? styles.rotate : ''}`} />
+                <IconWrapper icon={FiChevronDown} className={`${styles.chevron} ${isCountryOpen ? styles.rotate : ''}`} />
               </button>
+
 
               {isCountryOpen && (
                 <div className={styles.countryDropdown}>
@@ -370,22 +468,64 @@ export default function Header() {
                 </div>
               )}
             </div>
-            
-            <Link href="/account" className={styles.iconButton}>
-            <IconWrapper icon={FiUser} className={styles.icon} />
-            </Link>
+           
+            <div className={styles.accountContainer} ref={accountDropdownRef}>
+              <button
+                onClick={toggleAccountDropdown}
+                className={`${styles.iconButton} ${styles.profileButton}`}
+              >
+                <div className={styles.profileImageContainer}>
+                  {profilePic ? (
+                    <Image
+                      src={profilePic}
+                      alt="Profile"
+                      width={40}
+                      height={40}
+                      className={styles.profileImage}
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = "/default-profile.svg";
+                        setProfilePic(null);
+                      }}
+                    />
+                  ) : (
+                    <div className={styles.profileInitials}>
+                      {getInitials()}
+                    </div>
+                  )}
+                </div>
+              </button>
 
-            <button className={styles.iconButton} title="History">
-            <IconWrapper icon={FiClock} className={styles.icon} />
+
+              {isAccountOpen && (
+                <div className={styles.accountDropdown}>
+                  <Link href="/account" className={styles.accountOption}>
+                    <IconWrapper icon={FiUser} className={styles.dropdownIcon} />
+                    <span>{getTranslation('profile')}</span>
+                  </Link>
+                  <button onClick={handleLogout} className={styles.accountOption}>
+                    <IconWrapper icon={FiLogOut} className={styles.dropdownIcon} />
+                    <span>{getTranslation('logout')}</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
+
+            <button className={`${styles.iconButton} ${styles.hoverEffect}`} title="History">
+              <IconWrapper icon={FiClock} className={styles.icon} />
             </button>
 
-            {/* Modified cart button to link directly to cart page */}
-            <Link href="/cart" className={styles.iconButton}>
-            <IconWrapper icon={FiShoppingCart} className={styles.icon} />
-              <span className={styles.cartBadge}>{cartCount}</span>
+
+            <Link href="/cart" className={`${styles.iconButton} ${styles.cartButton}`}>
+              <div className={styles.cartIconContainer}>
+                <IconWrapper icon={FiShoppingCart} className={styles.icon} />
+                <span className={styles.cartBadge}>{cartCount}</span>
+              </div>
             </Link>
           </div>
         </div>
+
 
         <nav className={styles.navMenu}>
           <ul className={styles.navList}>
@@ -401,8 +541,7 @@ export default function Header() {
             ))}
           </ul>
         </nav>
-        
-        {/* Toast notification for items added to cart */}
+       
         {showAddedToast && (
           <div className={styles.addedToast}>
             {getTranslation('addedToCart')}
@@ -413,18 +552,22 @@ export default function Header() {
   );
 }
 
+
 function AnnouncementBar({ announcements }: { announcements: string[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
 
   useEffect(() => {
     const scrollContainer = scrollRef.current;
     const container = containerRef.current;
     if (!scrollContainer || !container) return;
 
+
     let animationId: number | null = null;
     let position = 0;
     const speed = 1;
+
 
     const animate = () => {
       position -= speed;
@@ -435,9 +578,11 @@ function AnnouncementBar({ announcements }: { announcements: string[] }) {
       animationId = window.requestAnimationFrame(animate);
     };
 
+
     position = container.offsetWidth;
     scrollContainer.style.transform = `translateX(${position}px)`;
     animationId = window.requestAnimationFrame(animate);
+
 
     return () => {
       if (animationId !== null) {
@@ -445,6 +590,7 @@ function AnnouncementBar({ announcements }: { announcements: string[] }) {
       }
     };
   }, [announcements]);
+
 
   return (
     <div ref={containerRef} className={styles.announcementContainer}>
@@ -458,3 +604,4 @@ function AnnouncementBar({ announcements }: { announcements: string[] }) {
     </div>
   );
 }
+

@@ -1,0 +1,418 @@
+export interface Product {
+  id: number;
+  brand: string;
+  name: string;
+  price: string;
+  image: string;
+  rating: number;
+  description: string;
+  material: string;
+  careInstructions: string;
+  reviewCount: number;
+  availability: boolean;
+  sizes: string[];
+  colors: string[];
+  category: 'men' | 'women' | 'accessories';
+}
+
+export const products: Product[] = [
+  // MEN'S PRODUCTS (from your men's page)
+  { 
+    id: 1, 
+    category: 'men',
+    brand: 'Italian Suit', 
+    name: 'Men suit', 
+    price: '$150.00', 
+    image: '/images/guy.png',
+    rating: 5,
+    description: 'Premium Italian wool suit with perfect tailoring',
+    material: '100% Italian wool',
+    careInstructions: 'Dry clean only',
+    reviewCount: 42,
+    availability: true,
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['Black', 'Navy', 'Charcoal']
+  },
+  { 
+    id: 2, 
+    category: 'men',
+    brand: 'Tuxedo', 
+    name: 'Men suit', 
+    price: '$150.00', 
+    image: '/images/image1.png',
+    rating: 5,
+    description: 'Classic tuxedo with satin lapels',
+    material: 'Wool blend with satin',
+    careInstructions: 'Professional dry cleaning',
+    reviewCount: 35,
+    availability: true,
+    sizes: ['S', 'M', 'L'],
+    colors: ['Black']
+  },
+  { 
+    id: 3, 
+    category: 'men',
+    brand: 'Mandarin Suit', 
+    name: 'Men suit', 
+    price: '$150.00', 
+    image: '/images/mandarin.jpg',
+    rating: 5,
+    description: 'Elegant mandarin collar suit',
+    material: 'Silk-wool blend',
+    careInstructions: 'Dry clean only',
+    reviewCount: 28,
+    availability: true,
+    sizes: ['M', 'L', 'XL'],
+    colors: ['Black', 'Red']
+  },
+  { 
+    id: 4, 
+    category: 'men',
+    brand: 'Double Breasted Suit', 
+    name: 'Men suit', 
+    price: '$150.00', 
+    image: '/images/beau.png',
+    rating: 5,
+    description: 'Classic double breasted suit',
+    material: 'Super 120s wool',
+    careInstructions: 'Dry clean only',
+    reviewCount: 39,
+    availability: true,
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['Navy', 'Charcoal']
+  },
+  { 
+    id: 5, 
+    category: 'men',
+    brand: 'Classic Suit', 
+    name: 'Men suit', 
+    price: '$180.00', 
+    image: '/images/tall.png',
+    rating: 4,
+    description: 'Timeless classic suit',
+    material: 'Wool-polyester blend',
+    careInstructions: 'Machine wash cold',
+    reviewCount: 47,
+    availability: true,
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['Black', 'Navy', 'Gray']
+  },
+  { 
+    id: 6, 
+    category: 'men',
+    brand: 'Slim Fit', 
+    name: 'Men suit', 
+    price: '$200.00', 
+    image: '/images/frown.png',
+    rating: 5,
+    description: 'Modern slim fit suit',
+    material: 'Stretch wool blend',
+    careInstructions: 'Dry clean only',
+    reviewCount: 53,
+    availability: true,
+    sizes: ['S', 'M'],
+    colors: ['Black', 'Navy']
+  },
+  { 
+    id: 7, 
+    category: 'men',
+    brand: 'Slim Fit', 
+    name: 'Men suit', 
+    price: '$200.00', 
+    image: '/images/bblack.png',
+    rating: 5,
+    description: 'Ultra slim fit suit',
+    material: 'Lightweight wool',
+    careInstructions: 'Dry clean only',
+    reviewCount: 31,
+    availability: false,
+    sizes: ['S', 'M', 'L'],
+    colors: ['Black']
+  },
+  { 
+    id: 8, 
+    category: 'men',
+    brand: 'Slim Fit', 
+    name: 'Men suit', 
+    price: '$200.00', 
+    image: '/images/man1.png',
+    rating: 4,
+    description: 'Tailored slim fit suit',
+    material: 'Italian wool',
+    careInstructions: 'Professional dry clean only',
+    reviewCount: 29,
+    availability: true,
+    sizes: ['M', 'L', 'XL'],
+    colors: ['Navy', 'Charcoal']
+  },
+  { 
+    id: 9, 
+    category: 'men',
+    brand: 'Slim Fit', 
+    name: 'Men suit', 
+    price: '$200.00', 
+    image: '/images/mew.png',
+    rating: 5,
+    description: 'Contemporary slim fit',
+    material: 'Stretch wool blend',
+    careInstructions: 'Dry clean only',
+    reviewCount: 36,
+    availability: true,
+    sizes: ['S', 'M', 'L'],
+    colors: ['Black', 'Navy']
+  },
+  { 
+    id: 10, 
+    category: 'men',
+    brand: 'Slim Fit', 
+    name: 'Men suit', 
+    price: '$200.00', 
+    image: '/images/ash.png',
+    rating: 5,
+    description: 'Premium slim fit suit',
+    material: 'Super 150s wool',
+    careInstructions: 'Dry clean only',
+    reviewCount: 44,
+    availability: true,
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['Charcoal', 'Light Gray']
+  },
+
+  // WOMEN'S PRODUCTS (from your women's page)
+  { 
+    id: 11, 
+    category: 'women',
+    brand: 'Blue Blazer', 
+    name: 'Men suit', 
+    price: '$150.00', 
+    image: '/images/gre.png',
+    rating: 5,
+    description: 'Stylish blue blazer for women',
+    material: 'Wool blend',
+    careInstructions: 'Dry clean only',
+    reviewCount: 27,
+    availability: true,
+    sizes: ['XS', 'S', 'M', 'L'],
+    colors: ['Blue']
+  },
+  { 
+    id: 12, 
+    category: 'women',
+    brand: 'Tuxedo', 
+    name: 'Men suit', 
+    price: '$150.00', 
+    image: '/images/gree.png',
+    rating: 5,
+    description: 'Women\'s tuxedo for formal occasions',
+    material: 'Wool blend',
+    careInstructions: 'Dry clean only',
+    reviewCount: 19,
+    availability: true,
+    sizes: ['S', 'M', 'L'],
+    colors: ['Black']
+  },
+  { 
+    id: 13, 
+    category: 'women',
+    brand: 'Tuxedo', 
+    name: 'Men suit', 
+    price: '$150.00', 
+    image: '/images/tux1.png',
+    rating: 5,
+    description: 'Elegant women\'s tuxedo',
+    material: 'Wool blend',
+    careInstructions: 'Dry clean only',
+    reviewCount: 22,
+    availability: true,
+    sizes: ['S', 'M', 'L'],
+    colors: ['Black']
+  },
+  { 
+    id: 14, 
+    category: 'women',
+    brand: 'Office Suit', 
+    name: 'Men suit', 
+    price: '$150.00', 
+    image: '/images/busy2.jpg',
+    rating: 5,
+    description: 'Professional office suit for women',
+    material: 'Polyester blend',
+    careInstructions: 'Machine wash cold',
+    reviewCount: 31,
+    availability: true,
+    sizes: ['XS', 'S', 'M', 'L'],
+    colors: ['Black', 'Gray']
+  },
+  { 
+    id: 15, 
+    category: 'women',
+    brand: 'Classic Suit', 
+    name: 'Women suit', 
+    price: '$180.00', 
+    image: '/images/clean.avif',
+    rating: 4,
+    description: 'Classic women\'s suit',
+    material: 'Wool blend',
+    careInstructions: 'Dry clean only',
+    reviewCount: 25,
+    availability: true,
+    sizes: ['S', 'M', 'L'],
+    colors: ['Black', 'Navy']
+  },
+  { 
+    id: 16, 
+    category: 'women',
+    brand: 'Slim Fit', 
+    name: 'Women suit', 
+    price: '$200.00', 
+    image: '/images/purple1.jpg',
+    rating: 5,
+    description: 'Slim fit women\'s suit',
+    material: 'Stretch fabric',
+    careInstructions: 'Dry clean only',
+    reviewCount: 18,
+    availability: true,
+    sizes: ['XS', 'S', 'M'],
+    colors: ['Purple']
+  },
+  { 
+    id: 17, 
+    category: 'women',
+    brand: 'Slim Fit', 
+    name: 'Men suit', 
+    price: '$200.00', 
+    image: '/images/blue1.png',
+    rating: 5,
+    description: 'Blue slim fit women\'s suit',
+    material: 'Wool blend',
+    careInstructions: 'Dry clean only',
+    reviewCount: 21,
+    availability: true,
+    sizes: ['S', 'M', 'L'],
+    colors: ['Blue']
+  },
+  { 
+    id: 18, 
+    category: 'women',
+    brand: 'Slim Fit', 
+    name: 'Men suit', 
+    price: '$200.00', 
+    image: '/images/pink.png',
+    rating: 4,
+    description: 'Pink slim fit women\'s suit',
+    material: 'Cotton blend',
+    careInstructions: 'Machine wash cold',
+    reviewCount: 16,
+    availability: true,
+    sizes: ['S', 'M'],
+    colors: ['Pink']
+  },
+  { 
+    id: 19, 
+    category: 'women',
+    brand: 'Slim Fit', 
+    name: 'Men suit', 
+    price: '$200.00', 
+    image: '/images/busy.jpg',
+    rating: 5,
+    description: 'Professional women\'s suit',
+    material: 'Wool blend',
+    careInstructions: 'Dry clean only',
+    reviewCount: 29,
+    availability: true,
+    sizes: ['S', 'M', 'L'],
+    colors: ['Black']
+  },
+  { 
+    id: 20, 
+    category: 'women',
+    brand: 'Slim Fit', 
+    name: 'Men suit', 
+    price: '$200.00', 
+    image: '/images/white.png',
+    rating: 5,
+    description: 'White slim fit women\'s suit',
+    material: 'Linen blend',
+    careInstructions: 'Dry clean only',
+    reviewCount: 14,
+    availability: true,
+    sizes: ['S', 'M'],
+    colors: ['White']
+  },
+
+  // ACCESSORIES (from your accessories page)
+  { 
+    id: 21, 
+    category: 'accessories',
+    brand: 'Bow Tie', 
+    name: '', 
+    price: '$50.00', 
+    image: '/images/bow.png',
+    rating: 5,
+    description: 'Classic bow tie',
+    material: 'Silk',
+    careInstructions: 'Hand wash',
+    reviewCount: 32,
+    availability: true,
+    sizes: ['One Size'],
+    colors: ['Black', 'Red', 'Blue']
+  },
+  { 
+    id: 22, 
+    category: 'accessories',
+    brand: 'Pocket Handkerchief', 
+    name: '', 
+    price: '$100.00', 
+    image: '/images/chief.png',
+    rating: 5,
+    description: 'Elegant pocket handkerchief',
+    material: 'Cotton',
+    careInstructions: 'Machine wash cold',
+    reviewCount: 28,
+    availability: true,
+    sizes: ['One Size'],
+    colors: ['White', 'Blue', 'Red']
+  },
+  { 
+    id: 23, 
+    category: 'accessories',
+    brand: 'Tie', 
+    name: '', 
+    price: '$10.00', 
+    image: '/images/tie.png',
+    rating: 5,
+    description: 'Classic necktie',
+    material: 'Polyester',
+    careInstructions: 'Hand wash',
+    reviewCount: 45,
+    availability: true,
+    sizes: ['Standard'],
+    colors: ['Various']
+  },
+  { 
+    id: 24, 
+    category: 'accessories',
+    brand: 'Brooch', 
+    name: '', 
+    price: '$150.00', 
+    image: '/images/brooch.png',
+    rating: 5,
+    description: 'Elegant brooch',
+    material: 'Metal',
+    careInstructions: 'Wipe clean',
+    reviewCount: 19,
+    availability: true,
+    sizes: ['One Size'],
+    colors: ['Gold', 'Silver']
+  },
+  // ... (additional accessories if needed)
+];
+
+// Utility functions
+export const getProductsByCategory = (category: 'men' | 'women' | 'accessories') => {
+  return products.filter(product => product.category === category);
+};
+
+export const getProductById = (id: number) => {
+  return products.find(product => product.id === id);
+};

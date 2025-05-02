@@ -1,5 +1,8 @@
 "use client";
 
+import { signIn } from "next-auth/react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -15,10 +18,26 @@ interface SignInFormData {
 }
 
 export const SignInPage = (): JSX.Element => {
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
   const { register, handleSubmit } = useForm<SignInFormData>();
 
-  const onSubmit = (data: SignInFormData) => {
-    console.log(data);
+  const onSubmit = async (data: SignInFormData) => {
+    try {
+      const result = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setError("Invalid email or password");
+      } else {
+        router.push("/homepage");
+      }
+    } catch (error) {
+      setError("An error occurred during sign in");
+    }
   };
 
   return (
@@ -53,6 +72,10 @@ export const SignInPage = (): JSX.Element => {
             Enter email and password to sign in
           </p>
 
+          {error && (
+            <p className="text-red-500 mb-4">{error}</p>
+          )}
+
           <Card className="w-full max-w-[412px] border-none shadow-none">
             <CardContent className="p-0 space-y-6">
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -62,7 +85,7 @@ export const SignInPage = (): JSX.Element => {
                     Email:
                   </label>
                   <Input
-                    {...register("email")}
+                    {...register("email", { required: true })}
                     className="pl-[80px] h-[42px] rounded-[5px] border-black"
                     type="email"
                   />
@@ -74,7 +97,7 @@ export const SignInPage = (): JSX.Element => {
                     Password:
                   </label>
                   <Input
-                    {...register("password")}
+                    {...register("password", { required: true })}
                     className="pl-[100px] h-[42px] rounded-[5px] border-black"
                     type="password"
                   />
@@ -85,6 +108,7 @@ export const SignInPage = (): JSX.Element => {
                   <Checkbox
                     id="remember"
                     className="h-[27px] w-[31px] rounded-[3px] border-black"
+                    {...register("remember")}
                   />
                   <label
                     htmlFor="remember"
@@ -96,14 +120,12 @@ export const SignInPage = (): JSX.Element => {
 
                 {/* Sign in button */}
                 <div>
-                <Link href ="/homepage">
-                <Button
-                  type="submit"
-                  className="w-full h-11 bg-[#08106c] hover:bg-[#08106c]/90 rounded-[10px] font-['Open_Sans',Helvetica] font-bold text-[22px]"
-                >
-                  Sign in
-                </Button>
-                </Link>
+                  <Button
+                    type="submit"
+                    className="w-full h-11 bg-[#08106c] hover:bg-[#08106c]/90 rounded-[10px] font-['Open_Sans',Helvetica] font-bold text-[22px]"
+                  >
+                    Sign in
+                  </Button>
                 </div>
 
                 {/* Sign up link */}
