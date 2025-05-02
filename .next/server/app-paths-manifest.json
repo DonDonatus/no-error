@@ -1,8 +1,9 @@
 {
-  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/account/page": "app/account/page.js",
   "/api/user/profile/route": "app/api/user/profile/route.js",
   "/api/user/measurements/route": "app/api/user/measurements/route.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
   "/api/user/upload-profile-pic/route": "app/api/user/upload-profile-pic/route.js",
   "/api/user/remove-profile-pic/route": "app/api/user/remove-profile-pic/route.js"
 }
