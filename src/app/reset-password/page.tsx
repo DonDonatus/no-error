@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -15,7 +15,8 @@ interface ResetPasswordFormData {
   confirmPassword: string;
 }
 
-export default function ResetPassword() {
+// Separate the form logic into its own component
+function ResetPasswordForm() {
   const { register, handleSubmit, watch, formState: { errors } } = useForm<ResetPasswordFormData>();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -272,5 +273,18 @@ export default function ResetPassword() {
         </div>
       </div>
     </main>
+  );
+}
+
+// Main component with Suspense boundary
+export default function ResetPassword() {
+  return (
+    <Suspense fallback={
+      <div className="flex h-screen items-center justify-center">
+        <p className="text-lg">Loading...</p>
+      </div>
+    }>
+      <ResetPasswordForm />
+    </Suspense>
   );
 }

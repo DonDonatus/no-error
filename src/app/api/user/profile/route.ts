@@ -1,10 +1,9 @@
-// File: app/api/user/profile/route.ts
-import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
+import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
 import { authOptions } from 'lib/auth';
-import {prisma} from 'lib/prisma'; // Adjust based on your database setup
+import { prisma } from 'lib/prisma';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     // Get authenticated user from session
     const session = await getServerSession(authOptions);
@@ -25,9 +24,8 @@ export async function GET() {
         id: true,
         name: true,
         email: true,
-        phoneNumber: true, // Using phoneNumber instead of phone to match your schema
+        phoneNumber: true,
         profilePic: true,
-        // Don't include password for security
       },
     });
     
