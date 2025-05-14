@@ -1,15 +1,20 @@
-// File: app/api/user/upload-profile-pic/route.ts
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from 'lib/auth';
-import prisma from 'lib/prisma';
-import { writeFile } from 'fs/promises';
-import path from 'path';
+import { prisma } from 'lib/prisma';
+import { v2 as cloudinary } from 'cloudinary';
 import { v4 as uuidv4 } from 'uuid';
-import { mkdir } from 'fs/promises';
 
 // Set the maximum file size (5MB)
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || '',
+  api_key: process.env.CLOUDINARY_API_KEY || '',
+  api_secret: process.env.CLOUDINARY_API_SECRET || '',
+  secure: true // Use HTTPS
+});
 
 export async function POST(request: Request) {
   try {
@@ -50,28 +55,36 @@ export async function POST(request: Request) {
       );
     }
     
-    // Read file as array buffer
-    const buffer = await file.arrayBuffer();
+    // Convert file to base64 for Cloudinary upload
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    const base64Image = buffer.toString('base64');
+    const dataURI = `data:${file.type};base64,${base64Image}`;
     
-    // Generate a unique filename
-    const fileName = `${uuidv4()}${path.extname(file.name)}`;
+    // Generate a unique public_id for the image
+    const uniqueId = uuidv4();
     
-    // Set the upload directory and create it if it doesn't exist
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads');
+    // Upload to Cloudinary
+    const uploadResult = await new Promise((resolve, reject) => {
+      cloudinary.uploader.upload(
+        dataURI,
+        {
+          public_id: `profile-pics/${uniqueId}`,
+          overwrite: true,
+          transformation: [
+            { width: 400, height: 400, crop: "limit" }, // Resize image to reasonable dimensions
+            { quality: "auto" } // Optimize quality automatically
+          ]
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+    });
     
-    try {
-      // Try to ensure the directory exists
-      await mkdir(uploadDir, { recursive: true });
-    } catch (err) {
-      console.error('Error creating upload directory:', err);
-    }
-    
-    // Write file to disk
-    const filePath = path.join(uploadDir, fileName);
-    await writeFile(filePath, Buffer.from(buffer));
-    
-    // Create the URL for the uploaded file
-    const profilePicUrl = `/uploads/${fileName}`;
+    // Get the secure URL from the result
+    const profilePicUrl = (uploadResult as any).secure_url;
     
     // Update user profile in database
     await prisma.user.update({

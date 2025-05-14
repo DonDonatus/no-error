@@ -103,3 +103,14 @@
   content: "";
   animation: dots 1.5s steps(4, end) infinite;
 }
+
+/* Hide default eye icon in Chrome/Edge/Safari */
+input::-ms-reveal,
+input::-webkit-credentials-auto-fill-button,
+input::-webkit-contacts-auto-fill-button {
+  display: none !important;
+  pointer-events: none;
+  height: 0;
+  width: 0;
+  opacity: 0;
+}

@@ -5,6 +5,7 @@
   padding: 2rem 1rem;
 }
 
+
 .loading {
   display: flex;
   justify-content: center;
@@ -14,13 +15,15 @@
   color: #555;
 }
 
+
 .emptyCheckout {
   text-align: center;
   padding: 3rem 1rem;
 }
 
+
 .shopNowButton {
-  background-color: #000;
+  background-color: #08106c;
   color: white;
   border: none;
   padding: 0.8rem 1.5rem;
@@ -31,9 +34,11 @@
   transition: background-color 0.3s;
 }
 
+
 .shopNowButton:hover {
   background-color: #333;
 }
+
 
 .checkoutLayout {
   display: grid;
@@ -41,11 +46,13 @@
   gap: 2rem;
 }
 
+
 @media (min-width: 768px) {
   .checkoutLayout {
     grid-template-columns: 3fr 2fr;
   }
 }
+
 
 .title {
   font-size: 1.8rem;
@@ -53,6 +60,7 @@
   margin-bottom: 1.5rem;
   color: #08106c;
 }
+
 
 .steps {
   display: flex;
@@ -62,26 +70,31 @@
   border-bottom: 1px solid #eee;
 }
 
+
 .steps span {
   font-size: 0.9rem;
   color: #777;
 }
+
 
 .activeStep {
   color: #000 !important;
   font-weight: 600;
 }
 
+
 .arrow {
   margin: 0 0.8rem;
   color: #ccc;
 }
+
 
 .section {
   margin-bottom: 2rem;
   padding-bottom: 2rem;
   border-bottom: 1px solid #eee;
 }
+
 
 .sectionTitle {
   font-size: 1.2rem;
@@ -90,11 +103,13 @@
   color: #08106c;
 }
 
+
 .formGrid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
 }
+
 
 @media (min-width: 640px) {
   .formGrid {
@@ -102,9 +117,11 @@
   }
 }
 
+
 .formGroup {
   margin-bottom: 1rem;
 }
+
 
 .inputLabel {
   display: block;
@@ -112,6 +129,7 @@
   margin-bottom: 0.5rem;
   color: #555;
 }
+
 
 .input, .select {
   width: 100%;
@@ -122,14 +140,17 @@
   transition: border-color 0.3s;
 }
 
+
 .input:focus, .select:focus {
   outline: none;
   border-color: #000;
 }
 
+
 .newsletterOption {
   margin-top: 1rem;
 }
+
 
 .checkboxLabel {
   display: flex;
@@ -137,9 +158,11 @@
   cursor: pointer;
 }
 
+
 .checkbox {
   margin-right: 0.5rem;
 }
+
 
 .shippingOptions {
   display: flex;
@@ -147,23 +170,16 @@
   gap: 1rem;
 }
 
-.shippingOption {
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: border-color 0.3s;
-}
 
 .shippingOption:hover {
   border-color: #999;
 }
 
+
 .shippingOption input[type="radio"] {
   margin-right: 1rem;
 }
+
 
 .shippingOptionDetails {
   display: flex;
@@ -172,19 +188,23 @@
   flex: 1;
 }
 
+
 .shippingName {
   font-weight: 600;
   margin-right: 0.5rem;
 }
+
 
 .shippingTime {
   font-size: 0.85rem;
   color: #777;
 }
 
+
 .shippingPrice {
   font-weight: 600;
 }
+
 
 .paymentOptions {
   display: flex;
@@ -193,31 +213,12 @@
   margin-bottom: 1.5rem;
 }
 
-.paymentButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.8rem 1.2rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background-color: white;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.paymentButton:hover {
-  border-color: #999;
-}
-
-.activePayment {
-  border-color: #000;
-  font-weight: 600;
-}
 
 .paymentIcon {
   font-weight: 700;
   margin-right: 0.5rem;
 }
+
 
 .divider {
   display: flex;
@@ -225,11 +226,13 @@
   margin: 1.5rem 0;
 }
 
+
 .line {
   flex: 1;
   height: 1px;
   background-color: #eee;
 }
+
 
 .orText {
   margin: 0 1rem;
@@ -237,9 +240,11 @@
   font-size: 0.9rem;
 }
 
+
 .cardForm {
   margin-top: 1rem;
 }
+
 
 .radioLabel {
   display: flex;
@@ -248,6 +253,7 @@
   cursor: pointer;
 }
 
+
 .creditCardFields {
   padding: 1rem;
   border: 1px solid #eee;
@@ -255,15 +261,18 @@
   margin-top: 0.5rem;
 }
 
+
 .billingAddressCheck {
   margin-top: 1.5rem;
 }
+
 
 .navigationButtons {
   display: flex;
   justify-content: space-between;
   margin-top: 2rem;
 }
+
 
 .backButton {
   background-color: transparent;
@@ -275,12 +284,11 @@
   transition: color 0.3s;
 }
 
+
 .backButton:hover {
   color: #000;
 }
-.backButton:hover {
-  color: #000;
-}
+
 
 .continueButton {
   background-color: #08106c;
@@ -294,9 +302,11 @@
   border-radius: 4px;
 }
 
+
 .continueButton:hover {
   background-color: #333;
 }
+
 
 /* Order summary styles */
 .checkoutRight {
@@ -309,6 +319,7 @@
   overflow-y: auto;
 }
 
+
 .summaryTitle {
   font-size: 1.2rem;
   font-weight: 600;
@@ -318,12 +329,14 @@
   color: #08106c;
 }
 
+
 .orderItems {
   max-height: 350px;
   overflow-y: auto;
   margin-bottom: 1.5rem;
   padding-right: 5px;
 }
+
 
 .orderItem {
   display: flex;
@@ -332,12 +345,14 @@
   border-bottom: 1px solid #eee;
 }
 
+
 .productImageContainer {
   position: relative;
   margin-right: 1rem;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 
 .quantity {
   position: absolute;
@@ -358,6 +373,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+
 .imageWrapper {
   width: 60px;
   height: 75px;
@@ -366,27 +382,33 @@
   overflow: hidden;
 }
 
+
 .productImage {
   object-fit: cover;
 }
 
+
 .productInfo {
   flex: 1;
 }
+
 
 .productName {
   font-weight: 600;
   margin-bottom: 0.3rem;
 }
 
+
 .productSize {
   font-size: 0.85rem;
   color: #777;
 }
 
+
 .productPrice {
   font-weight: 600;
 }
+
 
 .discountRow {
   display: flex;
@@ -394,9 +416,11 @@
   gap: 0.5rem;
 }
 
+
 .discountInputWrapper {
   flex: 1;
 }
+
 
 .discountInput {
   width: 100%;
@@ -406,10 +430,12 @@
   font-size: 0.9rem;
 }
 
+
 .discountInput:disabled {
   background-color: #f5f5f5;
   color: #888;
 }
+
 
 .applyButton {
   background-color: #000;
@@ -422,26 +448,32 @@
   transition: all 0.3s;
 }
 
+
 .applyButton:hover:not(:disabled) {
   background-color: #333;
 }
+
 
 .applyButton:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
 
+
 .applyButton.loading {
   background-color: #555;
 }
+
 
 .applyButton.applied {
   background-color: #08106c;
 }
 
+
 .summaryItems {
   margin-bottom: 1.5rem;
 }
+
 
 .summaryItem {
   display: flex;
@@ -449,6 +481,7 @@
   margin-bottom: 0.8rem;
   font-size: 0.95rem;
 }
+
 
 .totalRow {
   display: flex;
@@ -459,15 +492,18 @@
   border-top: 1px solid #ddd;
 }
 
+
 .totalText {
   font-weight: 600;
   font-size: 1.1rem;
 }
 
+
 .totalAmountWrapper {
   display: flex;
   align-items: baseline;
 }
+
 
 .currencyCode {
   font-size: 0.9rem;
@@ -475,14 +511,17 @@
   color: #555;
 }
 
+
 .totalAmount {
   font-size: 1.4rem;
   font-weight: 700;
 }
 
+
 .orderNotes {
   margin-bottom: 1.5rem;
 }
+
 
 .notesLabel {
   display: block;
@@ -490,6 +529,7 @@
   margin-bottom: 0.5rem;
   color: #555;
 }
+
 
 .notesTextarea {
   width: 100%;
@@ -501,12 +541,14 @@
   resize: vertical;
 }
 
+
 .securityBadges {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
+
 
 .securityBadge {
   display: flex;
@@ -515,16 +557,19 @@
   color: #555;
 }
 
+
 .securityIcon {
   margin-right: 0.3rem;
   font-size: 1rem;
 }
+
 
 /* For empty cart */
 .emptyCart {
   text-align: center;
   padding: 3rem 2rem;
 }
+
 
 .empty {
   background-color: #000;
@@ -538,6 +583,7 @@
   border-radius: 4px;
 }
 
+
 /* Animation for discount code application */
 @keyframes pulse {
   0% { opacity: 1; }
@@ -545,6 +591,87 @@
   100% { opacity: 1; }
 }
 
+
 .loading {
   animation: pulse 1s infinite;
 }
+
+
+/* For mobile devices */
+@media (max-width: 768px) {
+  .checkoutLayout {
+    flex-direction: column;
+  }
+
+
+  .checkoutLeft {
+    order: 1;
+    width: 100%;
+  }
+
+
+  .checkoutRight {
+    order: 2;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+
+  .navigationButtons {
+    display: none; /* Hide desktop buttons on mobile */
+  }
+
+
+  .mobileNavigationButtons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 0 15px;
+    width: 100%;
+    order: 3;
+  }
+}
+
+
+/* For desktop */
+@media (min-width: 769px) {
+  .mobileNavigationButtons {
+    display: none; /* Hide mobile buttons on desktop */
+  }
+}
+
+
+/* Navigation buttons styling */
+.mobileNavigationButtons .backButton,
+.mobileNavigationButtons .continueButton {
+  padding: 12px 20px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+
+.mobileNavigationButtons .backButton {
+  background: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+
+.mobileNavigationButtons .continueButton {
+  background: #08106c;
+  color: #fff;
+  border: none;
+}
+
+
+.mobileNavigationButtons .continueButton:hover {
+  background: #333;
+}
+
+
+
+
+
+
+

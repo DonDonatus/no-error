@@ -1,20 +1,20 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import Header from '@/components/Header';
 import HelpButton from '@/components/HelpButton';
-import { useSession } from 'next-auth/react';
 
-export default function MeasurementsPage() {
+
+export default function ManualMeasurementsPage() {
   const router = useRouter();
-  const { data: session, status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      router.push('/login');
-    },
-  });
+  const { data: session } = useSession();
 
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [measurements, setMeasurements] = useState({
     chest: '',
     neck: '',
@@ -26,235 +26,196 @@ export default function MeasurementsPage() {
     sleeveLength: '',
   });
 
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState({ text: '', type: '' });
 
-  // Fetch existing measurements when component mounts
   useEffect(() => {
-    if (status === 'authenticated') {
-      fetchMeasurements();
-    }
-  }, [status]);
+    const fetchMeasurements = async () => {
+      try {
+        const response = await fetch('/api/user/measurements', {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(session?.accessToken && {
+              Authorization: `Bearer ${session.accessToken}`,
+            }),
+          },
+        });
 
-  const fetchMeasurements = async () => {
-    try {
-      const response = await fetch('/api/user/measurements');
-      
-      if (response.ok) {
+
+        if (!response.ok) throw new Error('Failed to fetch measurements');
+
+
         const data = await response.json();
-        if (data.success && data.measurements) {
-          setMeasurements(data.measurements);
+        if (data?.measurements) {
+          setMeasurements(prev => ({
+            ...prev,
+            chest: data.measurements.chest || '',
+            neck: data.measurements.neck || '',
+            trouserLength: data.measurements.trouserLength || '',
+            shoulderWidth: data.measurements.shoulderWidth || '',
+            trouserWaist: data.measurements.trouserWaist || '',
+            armLength: data.measurements.armLength || '',
+            hipCircumference: data.measurements.hipCircumference || '',
+            sleeveLength: data.measurements.sleeveLength || '',
+          }));
         }
+      } catch (error) {
+        console.error('Error fetching measurements:', error);
       }
-    } catch (error) {
-      console.error('Error fetching measurements:', error);
-    }
+    };
+
+
+    fetchMeasurements();
+  }, [session]);
+
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setMeasurements(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setMeasurements(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setMessage({ text: '', type: '' });
+
+
+    const hasMeasurements = Object.values(measurements).some(
+      value => value !== '' && !isNaN(parseFloat(value))
+    );
+
+
+    if (!hasMeasurements) {
+      setError('Please provide at least one measurement');
+      return;
+    }
+
+
+    setIsSubmitting(true);
+    setError(null);
+
 
     try {
       const response = await fetch('/api/user/measurements', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
+          ...(session?.accessToken && {
+            Authorization: `Bearer ${session.accessToken}`,
+          }),
         },
         body: JSON.stringify(measurements),
       });
 
-      const data = await response.json();
 
-      if (response.ok) {
-        setMessage({ 
-          text: 'Measurements saved successfully!', 
-          type: 'success' 
-        });
-        
-        // Redirect to account page after successful save
-        setTimeout(() => {
-          router.push('/account');
-        }, 1500);
-      } else {
-        setMessage({ 
-          text: data.error || 'Failed to save measurements', 
-          type: 'error' 
-        });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to save measurements');
       }
+
+
+      router.push('/account');
     } catch (error) {
-      console.error('Error:', error);
-      setMessage({ 
-        text: 'An error occurred. Please try again.', 
-        type: 'error' 
-      });
+      console.error('Error updating measurements:', error);
+      setError(error instanceof Error ? error.message : 'An unknown error occurred');
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
+
 
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-white py-10">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-[#08106C] mb-6 text-center">Measurement Details</h1>
-          <p className="text-center mb-8">Please enter your details accurately in inches or centimeters</p>
+      <div className="bg-white min-h-screen py-10">
+        <div className="max-w-3xl mx-auto px-4">
+          <h1 className="text-2xl font-bold text-[#08106C] mb-6">
+            Measurement Details
+          </h1>
 
-          {message.text && (
-            <div className={`mb-4 p-3 rounded-md ${
-              message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-            }`}>
-              {message.text}
+
+          <p className="text-gray-600 mb-6">
+            Please enter your details accurately in inches or centimeters
+          </p>
+
+
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">
+              {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+
+          <form onSubmit={handleSubmit} className="border rounded-lg p-6 bg-gray-50">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label htmlFor="chest" className="block text-sm font-medium text-gray-700 mb-1">
-                  Chest Circumference:
-                </label>
-                <input
-                  type="text"
-                  id="chest"
-                  name="chest"
-                  value={measurements.chest}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 40 inches"
-                  className="w-full border border-gray-300 rounded-full px-4 py-2"
-                />
+              {/* Left Column */}
+              <div className="space-y-4">
+                {[
+                  { id: 'chest', label: 'Chest Circumference', placeholder: 'e.g., 40 inches' },
+                  { id: 'trouserLength', label: 'Trouser Length', placeholder: 'e.g., 32 inches' },
+                  { id: 'trouserWaist', label: 'Trouser Waist', placeholder: 'e.g., 34 inches' },
+                  { id: 'hipCircumference', label: 'Hip Circumference', placeholder: 'e.g., 40 inches' },
+                ].map(field => (
+                  <div key={field.id}>
+                    <label htmlFor={field.id} className="block text-sm font-medium text-gray-700 mb-1">
+                      {field.label}:
+                    </label>
+                    <input
+                      type="text"
+                      id={field.id}
+                      name={field.id}
+                      value={measurements[field.id as keyof typeof measurements]}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-[#08106C] focus:border-transparent"
+                      placeholder={field.placeholder}
+                    />
+                  </div>
+                ))}
               </div>
 
-              <div>
-                <label htmlFor="neck" className="block text-sm font-medium text-gray-700 mb-1">
-                  Neck Circumference:
-                </label>
-                <input
-                  type="text"
-                  id="neck"
-                  name="neck"
-                  value={measurements.neck}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 16 inches"
-                  className="w-full border border-gray-300 rounded-full px-4 py-2"
-                />
-              </div>
 
-              <div>
-                <label htmlFor="trouserLength" className="block text-sm font-medium text-gray-700 mb-1">
-                  Trouser Length:
-                </label>
-                <input
-                  type="text"
-                  id="trouserLength"
-                  name="trouserLength"
-                  value={measurements.trouserLength}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 32 inches"
-                  className="w-full border border-gray-300 rounded-full px-4 py-2"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="shoulderWidth" className="block text-sm font-medium text-gray-700 mb-1">
-                  Shoulder Width:
-                </label>
-                <input
-                  type="text"
-                  id="shoulderWidth"
-                  name="shoulderWidth"
-                  value={measurements.shoulderWidth}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 18 inches"
-                  className="w-full border border-gray-300 rounded-full px-4 py-2"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="trouserWaist" className="block text-sm font-medium text-gray-700 mb-1">
-                  Trouser Waist:
-                </label>
-                <input
-                  type="text"
-                  id="trouserWaist"
-                  name="trouserWaist"
-                  value={measurements.trouserWaist}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 34 inches"
-                  className="w-full border border-gray-300 rounded-full px-4 py-2"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="armLength" className="block text-sm font-medium text-gray-700 mb-1">
-                  Arm Length:
-                </label>
-                <input
-                  type="text"
-                  id="armLength"
-                  name="armLength"
-                  value={measurements.armLength}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 25 inches"
-                  className="w-full border border-gray-300 rounded-full px-4 py-2"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="hipCircumference" className="block text-sm font-medium text-gray-700 mb-1">
-                  Hip Circumference:
-                </label>
-                <input
-                  type="text"
-                  id="hipCircumference"
-                  name="hipCircumference"
-                  value={measurements.hipCircumference}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 40 inches"
-                  className="w-full border border-gray-300 rounded-full px-4 py-2"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="sleeveLength" className="block text-sm font-medium text-gray-700 mb-1">
-                  Sleeve Length:
-                </label>
-                <input
-                  type="text"
-                  id="sleeveLength"
-                  name="sleeveLength"
-                  value={measurements.sleeveLength}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 34 inches"
-                  className="w-full border border-gray-300 rounded-full px-4 py-2"
-                />
+              {/* Right Column */}
+              <div className="space-y-4">
+                {[
+                  { id: 'neck', label: 'Neck Circumference', placeholder: 'e.g., 16 inches' },
+                  { id: 'shoulderWidth', label: 'Shoulder Width', placeholder: 'e.g., 18 inches' },
+                  { id: 'armLength', label: 'Arm Length', placeholder: 'e.g., 25 inches' },
+                  { id: 'sleeveLength', label: 'Sleeve Length', placeholder: 'e.g., 34 inches' },
+                ].map(field => (
+                  <div key={field.id}>
+                    <label htmlFor={field.id} className="block text-sm font-medium text-gray-700 mb-1">
+                      {field.label}:
+                    </label>
+                    <input
+                      type="text"
+                      id={field.id}
+                      name={field.id}
+                      value={measurements[field.id as keyof typeof measurements]}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-[#08106C] focus:border-transparent"
+                      placeholder={field.placeholder}
+                    />
+                  </div>
+                ))}
               </div>
             </div>
+
 
             <div className="mt-8 flex justify-center">
               <button
                 type="submit"
-                disabled={loading}
-                className="bg-[#08106C] text-white font-semibold px-6 py-3 rounded-full hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 min-w-[200px]"
+                disabled={isSubmitting}
+                className={`${
+                  isSubmitting ? 'bg-gray-400' : 'bg-[#08106C] hover:bg-[#06095a]'
+                } text-white px-8 py-3 rounded-full font-semibold transition-colors w-64 flex items-center justify-center`}
               >
-                {loading ? (
-                  <span className="flex items-center justify-center">
-                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                {isSubmitting ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    Processing...
-                  </span>
+                    Saving...
+                  </>
                 ) : (
                   'Save and Submit'
                 )}
@@ -262,12 +223,18 @@ export default function MeasurementsPage() {
             </div>
           </form>
 
-          <p className="text-center mt-6 text-gray-600">
+
+          <div className="mt-4 text-center text-sm text-gray-500">
             All measurements should be taken while standing straight in a relaxed position
-          </p>
+          </div>
         </div>
       </div>
       <HelpButton />
     </>
   );
 }
+
+
+
+
+

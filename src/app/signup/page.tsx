@@ -1,6 +1,5 @@
 "use client";
 
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -10,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-
+import { Eye, EyeOff } from "lucide-react";
 
 // Password schema with strict requirements
 const passwordSchema = z
@@ -20,18 +19,15 @@ const passwordSchema = z
   .regex(/[0-9]/, "Must contain at least one number")
   .regex(/[^A-Za-z0-9]/, "Must contain at least one special character");
 
-
-// Form validation schema
+// Form validation schema with improved phone validation
 const formSchema = z.object({
   name: z.string().min(1, "Username is required"),
   email: z.string().email("Invalid email address"),
-  phoneNumber: z.string().regex(/^\(\d{3}\)\s\d{3}-\d{4}$/, "Invalid phone format"),
+  phoneNumber: z.string().regex(/^\+1 \(\d{3}\) \d{3}-\d{4}$/, "Invalid US phone format"),
   password: passwordSchema,
 });
 
-
 type SignupFormData = z.infer<typeof formSchema>;
-
 
 const calculatePasswordScore = (password: string): number => {
   let score = 0;
@@ -42,13 +38,12 @@ const calculatePasswordScore = (password: string): number => {
   return score;
 };
 
-
 export default function Signup() {
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
   const [passwordScore, setPasswordScore] = useState(0);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -60,31 +55,37 @@ export default function Signup() {
     resolver: zodResolver(formSchema),
   });
 
-
   const phoneValue = watch("phoneNumber", "");
   const passwordValue = watch("password", "");
 
-
-  // Handle phone number formatting
+  // Handle phone number formatting for US format (+1 (XXX) XXX-XXXX)
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const digits = e.target.value.replace(/\D/g, "");
     let formattedPhone = "";
 
-
     if (digits.length > 0) {
-      formattedPhone += digits.substring(0, Math.min(3, digits.length));
-      if (digits.length > 3) {
-        formattedPhone = `(${formattedPhone}) ${digits.substring(3, Math.min(6, digits.length))}`;
-        if (digits.length > 6) {
-          formattedPhone += `-${digits.substring(6, Math.min(10, digits.length))}`;
+      // Always add the US country code
+      formattedPhone = "+1 ";
+      
+      if (digits.length > 0) {
+        formattedPhone += `(${digits.substring(0, Math.min(3, digits.length))})`;
+        
+        if (digits.length > 3) {
+          formattedPhone = `+1 (${digits.substring(0, 3)}) ${digits.substring(3, Math.min(6, digits.length))}`;
+          
+          if (digits.length > 6) {
+            formattedPhone += `-${digits.substring(6, Math.min(10, digits.length))}`;
+          }
         }
       }
     }
 
-
     setValue("phoneNumber", formattedPhone, { shouldValidate: true });
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const onSubmit = async (data: SignupFormData) => {
     try {
@@ -96,22 +97,18 @@ export default function Signup() {
         body: JSON.stringify(data),
       });
 
-
       const result = await response.json();
-
 
       if (!response.ok) {
         setServerError(result.error || "Failed to create account");
         return;
       }
 
-
       router.push("/signin");
     } catch (error) {
       setServerError("An error occurred during signup");
     }
   };
-
 
   return (
     <main className="flex h-screen w-full bg-white overflow-hidden">
@@ -123,7 +120,6 @@ export default function Signup() {
           src="/images/signup.png"
         />
       </div>
-
 
       {/* Right side - Sign up form */}
       <div className="flex flex-1 flex-col items-center justify-center p-4 sm:p-6 md:p-8 overflow-y-auto">
@@ -137,22 +133,18 @@ export default function Signup() {
             />
           </div>
 
-
           {/* Sign up heading */}
           <h1 className="font-['Open_Sans',Helvetica] font-bold text-black text-3xl sm:text-3xl md:text-4xl text-center mb-2">
             Sign Up
           </h1>
 
-
           <p className="font-['Montserrat',Helvetica] font-light text-black text-base sm:text-lg text-center mb-6">
             Enter details to sign up
           </p>
 
-
           {serverError && (
             <p className="text-red-500 mb-3 text-sm">{serverError}</p>
           )}
-
 
           <Card className="w-full border-none shadow-none">
             <CardContent className="p-0 space-y-4">
@@ -173,7 +165,6 @@ export default function Signup() {
                   )}
                 </div>
 
-
                 {/* Email input */}
                 <div className="relative">
                   <label className="absolute left-0 top-1/2 -translate-y-1/2 font-['Montserrat',Helvetica] font-thin text-black text-base z-10 pl-4">
@@ -190,8 +181,7 @@ export default function Signup() {
                   )}
                 </div>
 
-
-                {/* Phone input */}
+                {/* Phone input - Improved with US format */}
                 <div className="relative">
                   <label className="absolute left-0 top-1/2 -translate-y-1/2 font-['Montserrat',Helvetica] font-thin text-black text-base z-10 pl-4">
                     Phone:
@@ -200,18 +190,17 @@ export default function Signup() {
                     {...register("phoneNumber")}
                     className="pl-20 h-12 rounded-md border-black text-base"
                     type="tel"
-                    placeholder="(123) 456-7890"
+                    placeholder="+1 (123) 456-7890"
                     value={phoneValue}
                     onChange={handlePhoneChange}
-                    maxLength={14}
+                    maxLength={17}
                   />
                   {errors.phoneNumber && (
                     <p className="text-red-500 text-xs mt-1">{errors.phoneNumber.message}</p>
                   )}
                 </div>
 
-
-                {/* Password input */}
+                {/* Password input with visibility toggle */}
                 <div className="relative">
                   <div className="relative">
                     <label className="absolute left-0 top-1/2 -translate-y-1/2 font-['Montserrat',Helvetica] font-thin text-black text-base z-10 pl-4">
@@ -219,8 +208,8 @@ export default function Signup() {
                     </label>
                     <Input
                       {...register("password")}
-                      className="pl-24 h-12 rounded-md border-black text-base"
-                      type="password"
+                      className="pl-24 pr-12 h-12 rounded-md border-black text-base"
+                      type={showPassword ? "text" : "password"}
                       placeholder={isPasswordFocused ? "" : "At least 8 characters"}
                       onFocus={() => setIsPasswordFocused(true)}
                       onBlur={() => {
@@ -235,6 +224,17 @@ export default function Signup() {
                         setPasswordScore(calculatePasswordScore(val));
                       }}
                     />
+                    <button
+                      type="button"
+                      onClick={togglePasswordVisibility}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                    >
+                      {showPassword ? (
+                        <EyeOff size={20} />
+                      ) : (
+                        <Eye size={20} />
+                      )}
+                    </button>
                   </div>
                  
                   {/* Password requirements - Only shown when password input is focused or has value */}
@@ -288,7 +288,6 @@ export default function Signup() {
                   )}
                 </div>
 
-
                 {/* Sign up button */}
                 <div>
                   <Button
@@ -299,7 +298,6 @@ export default function Signup() {
                     Sign Up
                   </Button>
                 </div>
-
 
                 {/* Sign in link */}
                 <div className="text-center font-['Montserrat',Helvetica] text-base sm:text-lg mt-2">
@@ -316,6 +314,3 @@ export default function Signup() {
     </main>
   );
 }
-
-
-

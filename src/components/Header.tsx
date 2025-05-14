@@ -12,8 +12,6 @@ import { IconBaseProps, IconType } from 'react-icons';
 import { signOut } from "next-auth/react";
 
 
-
-
 interface Country {
   code: string;
   name: string;
@@ -192,7 +190,7 @@ export default function Header() {
     { id: 'men', label: translations[currentLanguage]?.men || translations.en.men, path: '/homepage' },
     { id: 'women', label: translations[currentLanguage]?.women || translations.en.women, path: '/women' },
     { id: 'accessories', label: translations[currentLanguage]?.accessories || translations.en.accessories, path: '/accessories' },
-    { id: 'exclusives', label: translations[currentLanguage]?.exclusives || translations.en.exclusives, path: '/exclusive' }
+    { id: 'exclusives', label: translations[currentLanguage]?.exclusives || translations.en.exclusives, path: '/exclusives' }
   ];
 
 
@@ -276,7 +274,7 @@ export default function Header() {
 
   const handleLogout = async () => {
     await signOut({
-      redirect: true,  // Redirects to `/signin` after logout
+      redirect: true,
       callbackUrl: "/signin"
     });
   };
@@ -429,13 +427,21 @@ export default function Header() {
           </div>
 
 
-          <div style={{
-            color: '#A07B43',
-            fontFamily: 'Xenus',
-            fontWeight: 580,
-            fontSize: 30,
-          }}>
-            UOMO MIGLIORE
+          <div className={styles.logoContainer}>
+           
+              <div className={styles.desktopLogo}>
+                UOMO MIGLIORE
+              </div>
+              <div className={styles.mobileLogo}>
+                <Image
+                  src="/icons/logoh.svg"
+                  alt="UOMO MIGLIORE Logo"
+                  width={120}
+                  height={40}
+                  priority
+                />
+              </div>
+           
           </div>
 
 
@@ -479,8 +485,8 @@ export default function Header() {
                     <Image
                       src={profilePic}
                       alt="Profile"
-                      width={40}
-                      height={40}
+                      width={35}
+                      height={35}
                       className={styles.profileImage}
                       onError={(e) => {
                         e.currentTarget.onerror = null;

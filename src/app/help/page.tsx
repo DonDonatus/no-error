@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { FiSearch } from 'react-icons/fi';
 import Header from '@/components/Header'; // Assuming you have a Header component
 import { IconBaseProps,IconType } from 'react-icons';
+import { link } from 'fs';
 
 interface IconWrapperProps extends IconBaseProps {
   icon: IconType;
@@ -45,9 +46,10 @@ export default function HelpPage() {
     { 
       title: 'Chat with Willow', 
       icon: '/icons/chat.svg',
-      link: '#',
+      link: '/willow',
       width: 80,
-      height: 80
+      height: 80,
+   
     }
   ];
 
