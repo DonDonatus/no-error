@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -11,6 +12,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
 
+
 // Password schema with strict requirements
 const passwordSchema = z
   .string()
@@ -18,6 +20,7 @@ const passwordSchema = z
   .regex(/[A-Z]/, "Must contain at least one uppercase letter")
   .regex(/[0-9]/, "Must contain at least one number")
   .regex(/[^A-Za-z0-9]/, "Must contain at least one special character");
+
 
 // Form validation schema with improved phone validation
 const formSchema = z.object({
@@ -27,7 +30,9 @@ const formSchema = z.object({
   password: passwordSchema,
 });
 
+
 type SignupFormData = z.infer<typeof formSchema>;
+
 
 const calculatePasswordScore = (password: string): number => {
   let score = 0;
@@ -38,12 +43,15 @@ const calculatePasswordScore = (password: string): number => {
   return score;
 };
 
+
 export default function Signup() {
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
   const [passwordScore, setPasswordScore] = useState(0);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const {
     register,
@@ -55,24 +63,28 @@ export default function Signup() {
     resolver: zodResolver(formSchema),
   });
 
+
   const phoneValue = watch("phoneNumber", "");
   const passwordValue = watch("password", "");
+  const emailValue = watch("email", "");
+
 
   // Handle phone number formatting for US format (+1 (XXX) XXX-XXXX)
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const digits = e.target.value.replace(/\D/g, "");
     let formattedPhone = "";
 
+
     if (digits.length > 0) {
       // Always add the US country code
       formattedPhone = "+1 ";
-      
+     
       if (digits.length > 0) {
         formattedPhone += `(${digits.substring(0, Math.min(3, digits.length))})`;
-        
+       
         if (digits.length > 3) {
           formattedPhone = `+1 (${digits.substring(0, 3)}) ${digits.substring(3, Math.min(6, digits.length))}`;
-          
+         
           if (digits.length > 6) {
             formattedPhone += `-${digits.substring(6, Math.min(10, digits.length))}`;
           }
@@ -80,16 +92,27 @@ export default function Signup() {
       }
     }
 
+
     setValue("phoneNumber", formattedPhone, { shouldValidate: true });
   };
+
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
+
   const onSubmit = async (data: SignupFormData) => {
     try {
-      const response = await fetch("/api/auth/signup", {
+      setIsLoading(true);
+      setServerError(null);
+
+
+      // Store email in sessionStorage to use for resending verification if needed
+      sessionStorage.setItem('signupEmail', data.email);
+
+
+      const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -97,54 +120,91 @@ export default function Signup() {
         body: JSON.stringify(data),
       });
 
+
       const result = await response.json();
+
 
       if (!response.ok) {
         setServerError(result.error || "Failed to create account");
+        setIsLoading(false);
         return;
       }
 
-      router.push("/signin");
+
+      // Redirect to verification pending page
+      router.push("/verification-pending");
+     
     } catch (error) {
       setServerError("An error occurred during signup");
+      setIsLoading(false);
     }
   };
 
+
   return (
-    <main className="flex h-screen w-full bg-white overflow-hidden">
-      {/* Left side - Image - Hidden on mobile */}
-      <div className="relative hidden md:block md:w-1/2 lg:w-7/12 h-full">
+    <main className="flex flex-col md:flex-row w-full min-h-screen">
+      {/* Left side - Background Image */}
+      {/* Background image for all screens - positioned absolutely behind content */}
+      <div className="fixed inset-0 -z-10 md:hidden">
+        <div className="absolute inset-0 bg-black/20"></div> {/* Optional overlay for better text contrast */}
         <img
-          className="h-full w-full object-cover"
-          alt="Man in suit"
           src="/images/signup.png"
+          alt="Man in suit"
+          className="w-full h-full object-cover"
         />
+        <div className="absolute inset-0 backdrop-blur-sm md:hidden"></div>
       </div>
 
+
+      {/* Original image container for larger screens */}
+      <div className="hidden md:block md:w-1/2 h-screen sticky top-0">
+        <div className="relative w-full h-full">
+          <img
+            src="/images/signup.png"
+            alt="Man in suit"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      </div>
+
+
       {/* Right side - Sign up form */}
-      <div className="flex flex-1 flex-col items-center justify-center p-4 sm:p-6 md:p-8 overflow-y-auto">
-        <div className="w-full max-w-md flex flex-col items-center">
-          {/* Logo - More reasonably sized */}
-          <div className="relative mb-4 w-full max-w-full h-24 sm:h-28 md:h-32">
+      <div className="relative flex flex-1 flex-col items-center justify-center px-4 md:px-8 z-10 min-h-screen">
+        <div className="w-full max-w-[90%] md:max-w-[599px] flex flex-col items-center mt-[15vh] md:mt-0 pb-8">
+          {/* Logo for large screens */}
+          <div className="relative w-full max-w-full h-48 sm:h-56 md:h-64 hidden sm:block top-5">
             <img
               className="h-full w-full object-contain"
-              alt="Company logo"
-              src="/images/image 3.png"
+              alt="Large screen logo"
+              src="/images/image3.png"
             />
           </div>
+ 
+          {/* Logo for small screens */}
+          <div className="relative w-full max-w-[100%] sm:hidden h-[180px] -mb-6 -mt-16">
+            <img
+              className="h-full w-full object-contain"
+              alt="Small screen logo"
+              src="/images/image3.png"
+            />
+          </div>
+
 
           {/* Sign up heading */}
           <h1 className="font-['Open_Sans',Helvetica] font-bold text-black text-3xl sm:text-3xl md:text-4xl text-center mb-2">
             Sign Up
           </h1>
 
+
           <p className="font-['Montserrat',Helvetica] font-light text-black text-base sm:text-lg text-center mb-6">
             Enter details to sign up
           </p>
 
+
           {serverError && (
             <p className="text-red-500 mb-3 text-sm">{serverError}</p>
           )}
+
 
           <Card className="w-full border-none shadow-none">
             <CardContent className="p-0 space-y-4">
@@ -165,6 +225,7 @@ export default function Signup() {
                   )}
                 </div>
 
+
                 {/* Email input */}
                 <div className="relative">
                   <label className="absolute left-0 top-1/2 -translate-y-1/2 font-['Montserrat',Helvetica] font-thin text-black text-base z-10 pl-4">
@@ -180,6 +241,7 @@ export default function Signup() {
                     <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
                   )}
                 </div>
+
 
                 {/* Phone input - Improved with US format */}
                 <div className="relative">
@@ -199,6 +261,7 @@ export default function Signup() {
                     <p className="text-red-500 text-xs mt-1">{errors.phoneNumber.message}</p>
                   )}
                 </div>
+
 
                 {/* Password input with visibility toggle */}
                 <div className="relative">
@@ -288,16 +351,18 @@ export default function Signup() {
                   )}
                 </div>
 
+
                 {/* Sign up button */}
                 <div>
                   <Button
                     type="submit"
                     className="w-full h-12 bg-[#08106c] hover:bg-[#08106c]/90 rounded-md font-['Open_Sans',Helvetica] font-bold text-xl"
-                    disabled={passwordScore < 3} // Disable if password is weak
+                    disabled={isLoading || passwordScore < 3} // Disable if password is weak or loading
                   >
-                    Sign Up
+                    {isLoading ? "Signing Up..." : "Sign Up"}
                   </Button>
                 </div>
+
 
                 {/* Sign in link */}
                 <div className="text-center font-['Montserrat',Helvetica] text-base sm:text-lg mt-2">
@@ -314,3 +379,4 @@ export default function Signup() {
     </main>
   );
 }
+

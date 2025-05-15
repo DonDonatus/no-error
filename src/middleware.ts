@@ -19,7 +19,7 @@ export default withAuth({
 // - Public routes (signin, signup, home)
 // - Static files (_next, images, favicon)
 export const config = {
-  matcher: ["/((?!signin|signup|forgot-password|$|_next|images|favicon.ico).*)"],
+  matcher: ["/((?!signin|signup|forgot-password|verification-pending|$|_next|images|favicon.ico).*)"],
 };
 
 

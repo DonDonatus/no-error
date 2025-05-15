@@ -20,6 +20,10 @@ model User {
   orders            Order[]
   measurements      Measurement[]
   passwordResetToken PasswordResetToken?
+   emailVerified            Boolean   @default(false)
+  verificationToken     String?
+  verificationTokenExpiry DateTime?
+
 }
 
 model Order {
