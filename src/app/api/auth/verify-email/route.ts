@@ -1,11 +1,10 @@
-// FILE: src/app/api/auth/verify-email/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
-import { redirect } from 'next/navigation';
 
+// Add this export config to enable dynamic behavior
+export const dynamic = 'force-dynamic';
 
 const prisma = new PrismaClient();
-
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,7 +12,10 @@ export async function GET(request: NextRequest) {
     const token = searchParams.get('token');
    
     if (!token) {
-      return NextResponse.redirect(new URL('/verification-failed', request.url));
+      return NextResponse.json(
+        { success: false, error: 'No verification token provided' },
+        { status: 400 }
+      );
     }
    
     const now = new Date();
@@ -29,8 +31,10 @@ export async function GET(request: NextRequest) {
     });
    
     if (!user) {
-      // If no user found with valid token, redirect to failure page
-      return NextResponse.redirect(new URL('/verification-failed', request.url));
+      return NextResponse.json(
+        { success: false, error: 'Invalid or expired verification token' },
+        { status: 400 }
+      );
     }
    
     // Update user record to set emailVerified to true and clear the verification token
@@ -43,14 +47,15 @@ export async function GET(request: NextRequest) {
       }
     });
    
-    // Redirect to signin page on success// In verify-email/route.ts
-    return NextResponse.redirect(new URL('/signin?verified=true', request.url));
+    return NextResponse.json({ success: true });
    
   } catch (error) {
     console.error("Email verification error:", error);
-    return NextResponse.redirect(new URL('/verification-failed', request.url));
+    return NextResponse.json(
+      { success: false, error: 'Verification failed' },
+      { status: 500 }
+    );
   } finally {
     await prisma.$disconnect();
   }
 }
-
