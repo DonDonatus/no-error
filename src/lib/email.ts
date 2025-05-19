@@ -23,13 +23,12 @@ export async function sendVerificationEmail(email: string, verificationToken: st
     subject: 'Verify Your Email Address',
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 5px;">
-        <img src="${baseUrl}/icons/logoh.svg" alt="Logo" style="max-width: 200px; display: block; margin: 0 auto 20px;" />
         <h2 style="color: #08106c; text-align: center;">Verify Your Email Address</h2>
-        <p style="margin-bottom: 20px; line-height: 1.5;">Thank you for signing up! Please verify your email address to complete your registration.</p>
+        <p style="margin-bottom: 20px; line-height: 1.5;text-align: center;">Thank you for signing up! Please verify your email address to complete your registration.</p>
         <div style="text-align: center; margin: 30px 0;">
           <a href="${verificationUrl}" style="background-color: #08106c; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">Verify Email</a>
         </div>
-        <p style="font-size: 14px; color: #666; margin-top: 30px;">If you didn't create an account, you can safely ignore this email.</p>
+        <p style="font-size: 14px; color: #666; margin-top: 30px;text-align: center;">If you didn't create an account, you can safely ignore this email.</p>
       </div>
     `,
   };
