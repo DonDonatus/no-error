@@ -70,14 +70,6 @@ export default function VerificationPending() {
       <Card className="w-full max-w-md border rounded-lg shadow-lg overflow-hidden">
         <CardContent className="p-8">
           <div className="flex flex-col items-center text-center">
-            {/* Logo */}
-            <div className="w-48 h-48 mb-6">
-              <img
-                src="public/icons/logoh.svg"  
-                alt="Logo"
-                className="w-full h-full object-contain"
-              />
-            </div>
            
             {/* Email icon */}
             <div className="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center mb-6">
