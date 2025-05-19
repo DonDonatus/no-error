@@ -69,33 +69,7 @@ export default function Signup() {
   const emailValue = watch("email", "");
 
 
-  // Handle phone number formatting for US format (+1 (XXX) XXX-XXXX)
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const digits = e.target.value.replace(/\D/g, "");
-    let formattedPhone = "";
-
-
-    if (digits.length > 0) {
-      // Always add the US country code
-      formattedPhone = "+1 ";
-     
-      if (digits.length > 0) {
-        formattedPhone += `(${digits.substring(0, Math.min(3, digits.length))})`;
-       
-        if (digits.length > 3) {
-          formattedPhone = `+1 (${digits.substring(0, 3)}) ${digits.substring(3, Math.min(6, digits.length))}`;
-         
-          if (digits.length > 6) {
-            formattedPhone += `-${digits.substring(6, Math.min(10, digits.length))}`;
-          }
-        }
-      }
-    }
-
-
-    setValue("phoneNumber", formattedPhone, { shouldValidate: true });
-  };
-
+ 
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -243,24 +217,46 @@ export default function Signup() {
                 </div>
 
 
-                {/* Phone input - Improved with US format */}
-                <div className="relative">
-                  <label className="absolute left-0 top-1/2 -translate-y-1/2 font-['Montserrat',Helvetica] font-thin text-black text-base z-10 pl-4">
-                    Phone:
-                  </label>
-                  <Input
-                    {...register("phoneNumber")}
-                    className="pl-20 h-12 rounded-md border-black text-base"
-                    type="tel"
-                    placeholder="+1 (123) 456-7890"
-                    value={phoneValue}
-                    onChange={handlePhoneChange}
-                    maxLength={17}
-                  />
-                  {errors.phoneNumber && (
-                    <p className="text-red-500 text-xs mt-1">{errors.phoneNumber.message}</p>
-                  )}
-                </div>
+                {/* Phone input */}
+              <div className="relative">
+                <label className="absolute left-0 top-1/2 -translate-y-1/2 font-['Montserrat',Helvetica] font-thin text-black text-base z-10 pl-4">
+                  Phone:
+                </label>
+                <Input
+                  {...register("phoneNumber", {
+                    required: "Phone number is required",
+                    validate: (value) => {
+                      const digits = value.replace(/\D/g, "");
+                      return digits.length === 10 || "Phone number must be 10 digits";
+                    },
+                  })}
+                  className="pl-20 h-12 rounded-md border-black text-base"
+                  type="tel"
+                  placeholder="(123) 456-7890"
+                  maxLength={14} // matches formatted length
+                  onChange={(e) => {
+                    const input = e.target as HTMLInputElement;
+                    const digits = input.value.replace(/\D/g, "").slice(0, 10);
+
+                    let formatted = digits;
+                    if (digits.length > 6) {
+                      formatted = `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+                    } else if (digits.length > 3) {
+                      formatted = `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+                    } else if (digits.length > 0) {
+                      formatted = `(${digits}`;
+                    }
+
+                    input.value = formatted;
+                  }}
+                />
+                {errors.phoneNumber && (
+                  <p className="text-red-500 text-xs mt-1">{errors.phoneNumber.message}</p>
+                )}
+              </div>
+
+
+
 
 
                 {/* Password input with visibility toggle */}
